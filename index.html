@@ -3,82 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rifa Solidaria — El Cariño Que Nos Une</title>
+    <title>Rifa Solidaria — Juan Pablo Gómez</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        /* Estilos Base */
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-        :root{--carbon:#1E2A35;--dorado:#C9A84C;--dorado-l:#E8C97A;--crema:#F5F0E8;--beige:#E8DFC8;--blanco:#fff;--gris:#6B7280}
-        body{background:#c8bc9e;font-family:'Lato',sans-serif;padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:20px;min-height:100vh}
+        :root{--carbon:#1E2A35;--dorado:#C9A84C;--dorado-l:#E8C97A;--crema:#F5F0E8;--beige:#E8DFC8;--blanco:#fff;--azul-agradece:#1e3a8a}
+        body{background:#c8bc9e;font-family:'Lato',sans-serif;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:20px;min-height:100vh}
 
-        /* Banner de Modo */
-        .mode-banner{width:860px;max-width:100%;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-radius:8px;font-size:13px;font-weight:700;gap:8px;flex-wrap:wrap}
-        .mode-banner.participante{background:#dbeafe;color:#1e40af;border:1.5px solid #93c5fd}
-        .mode-banner.admin{background:#dcfce7;color:#166534;border:1.5px solid #86efac}
+        /* Banner Admin */
+        .mode-banner{width:860px;max-width:100%;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-radius:8px;font-size:12px;font-weight:700;background:#dbeafe;color:#1e40af;border:1.5px solid #93c5fd}
+        .mode-banner.admin{background:#dcfce7;color:#166534;border-color:#86efac}
+        .btn-admin{background:#1e40af;color:#fff;padding:6px 12px;border-radius:4px;border:none;cursor:pointer;font-weight:700}
+        .mode-banner.admin .btn-admin{background:#166534}
+
+        /* Flyer Principal */
+        .flyer{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);box-shadow:0 15px 40px rgba(0,0,0,.2);overflow:hidden}
         
-        .banner-btns{display:flex;gap:8px}
-        button{cursor:pointer;font-family:inherit;transition: all 0.2s}
-        .btn-main{padding:8px 16px; border-radius:6px; border:none; font-weight:700}
-        .mode-banner.participante .btn-main{background:#1e40af;color:#fff}
-        .mode-banner.admin .btn-main{background:#166534;color:#fff}
-        .btn-export{background:var(--dorado); color:var(--carbon); padding:8px 16px; border-radius:6px; border:none; font-weight:700; display:none}
-        .mode-banner.admin .btn-export{display:inline-block}
-
-        /* Contenedor Principal (Flyer) */
-        .flyer{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
         .header{background:var(--carbon);padding:40px 20px;text-align:center;color:white}
-        .title{font-family:'Playfair Display',serif;font-size:36px;margin-top:10px}
-        .title span{color:var(--dorado-l);display:block;font-size:24px;font-style:italic}
-        
-        /* Secciones de Contenido */
-        .content-section{padding:30px; background:white; border-bottom:1px solid var(--beige)}
-        .section-title{font-family:'Playfair Display', serif; color:var(--carbon); margin-bottom:15px; border-bottom:2px solid var(--dorado); display:inline-block}
-        
-        .grid-info{display:grid; grid-template-columns: 1fr 1fr; gap:20px}
-        
-        /* Estilo Premios */
-        .premio-item{display:flex; align-items:center; gap:10px; margin-bottom:8px; font-weight:700; color:#444}
-        .premio-num{background:var(--dorado); color:white; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:50%; font-size:14px}
+        .header p{letter-spacing:4px;font-size:14px;color:var(--dorado-l);margin-bottom:10px;text-transform:uppercase}
+        .title{font-family:'Playfair Display',serif;font-size:42px;line-height:1.1}
+        .title span{display:block;font-size:22px;font-style:italic;margin-top:10px;font-weight:400;color:var(--dorado-l)}
 
-        /* Datos Transferencia */
-        .transfer-card{background:var(--crema); padding:20px; border-radius:8px; border-left:5px solid var(--dorado)}
-        .transfer-card p {margin:5px 0; font-size:14px}
-        
-        .price-band{background:var(--dorado);padding:15px;display:flex;justify-content:center;align-items:center;gap:20px;font-weight:900;font-size:24px; color:var(--carbon)}
-        
+        .context-box{padding:30px 40px;background:white;text-align:justify;line-height:1.6;color:#333;font-size:16px}
+        .context-box p{margin-bottom:12px}
+
+        .price-band{background:var(--dorado);padding:15px;text-align:center;font-weight:900;font-size:22px;color:var(--carbon);border-top:1px solid rgba(0,0,0,0.1);border-bottom:1px solid rgba(0,0,0,0.1)}
+
+        .info-grid{display:grid;grid-template-columns:1fr 1fr;background:white}
+        .info-col{padding:30px;border:1px solid var(--beige)}
+        .info-col h3{font-family:'Playfair Display',serif;margin-bottom:20px;color:var(--carbon);border-bottom:2px solid var(--dorado);display:inline-block}
+
+        .premio-item{margin-bottom:15px}
+        .premio-item strong{display:block;color:var(--dorado);font-size:14px;text-transform:uppercase}
+        .premio-item span{font-weight:700;font-size:17px;color:var(--carbon)}
+
+        .transfer-data{background:var(--crema);padding:20px;border-radius:8px;font-size:15px}
+        .transfer-data p{margin-bottom:6px;display:flex;justify-content:space-between}
+
+        .comprobante-box{margin:20px 30px;padding:20px;background:#fefce8;border:2px dashed var(--dorado);border-radius:10px;text-align:center;font-weight:700;color:#854d0e}
+
+        .mini-banner-azul{background:var(--azul-agradece);color:white;padding:12px;text-align:center;font-weight:700;letter-spacing:1px;font-size:14px}
+
+        .fecha-sorteo{padding:20px;text-align:center;background:var(--carbon);color:var(--dorado-l);font-size:20px;font-weight:900}
+
         /* Grilla de Números */
-        .numeros-wrap{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);padding:30px; margin-bottom:50px}
-        .num-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:10px;margin:25px 0}
-        
-        .num-btn{aspect-ratio:1;border:1.5px solid #d0c8b0;background:#fff;border-radius:6px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:0.2s; cursor:pointer}
-        .num-btn:hover{transform:scale(1.1);z-index:2; border-color:var(--dorado)}
+        .numeros-wrap{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);padding:30px;margin-bottom:40px}
+        .num-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin:25px 0}
+        .num-btn{aspect-ratio:1;border:1px solid #d0c8b0;background:#fff;border-radius:6px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:0.2s}
+        .num-btn:hover{transform:scale(1.08);box-shadow:0 5px 15px rgba(0,0,0,0.1)}
         .num-btn.reservado{background:#fef3c7;border-color:var(--dorado);color:#92400e}
         .num-btn.pagado{background:#dcfce7;border-color:#16a34a;color:#166534}
-        .num-btn .na{font-size:9px;font-weight:400;max-width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .num-btn .na{font-size:8px;font-weight:400;margin-top:2px;max-width:90%;overflow:hidden;text-overflow:ellipsis}
 
-        /* Modales y Toasts */
-        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center}
+        /* Modales */
+        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center}
         .overlay.open{display:flex}
-        .modal{background:#fff;padding:30px;border-radius:12px;width:350px;text-align:center}
-        .modal input{width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:4px}
-        .modal-btns{display:flex;gap:10px;margin-top:15px}
-        .modal-btns button{flex:1;padding:10px;border-radius:6px;border:none;font-weight:700}
-        
+        .modal{background:#fff;padding:30px;border-radius:12px;width:90%;max-width:350px;text-align:center}
+        .modal input{width:100%;padding:12px;margin:10px 0;border:1px solid #ccc;border-radius:6px}
+        .modal-btns{display:flex;gap:10px;margin-top:20px}
+        .modal-btns button{flex:1;padding:12px;border-radius:6px;border:none;font-weight:700;cursor:pointer}
+
         .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:8px;color:#fff;font-weight:700;opacity:0;transition:0.3s;z-index:2000}
         .toast.show{opacity:1}
-        .ok{background:#166534} .err{background:#991b1b} .info{background:#1e40af}
-
-        /* Tabla Admin */
-        .tabla-wrap{width:860px;max-width:100%;background:#fff;border:3px solid var(--dorado);margin-top:20px;display:none;overflow-x:auto}
-        table{width:100%;border-collapse:collapse; min-width:600px}
-        th{background:var(--carbon);color:var(--dorado);padding:12px;font-size:12px;text-align:left}
-        td{padding:12px;border-bottom:1px solid #eee;font-size:13px}
-
+        
         @media(max-width:768px){
-            .grid-info{grid-template-columns: 1fr}
+            .info-grid{grid-template-columns:1fr}
             .num-grid{grid-template-columns:repeat(5,1fr)}
-            .title{font-size:28px}
+            .title{font-size:32px}
         }
     </style>
 </head>
@@ -86,109 +78,115 @@
 
 <div id="toast" class="toast"></div>
 
-<div class="mode-banner participante" id="modeBanner">
-    <span id="modeText">👤 Modo Participante</span>
-    <div class="banner-btns">
-        <button class="btn-export" onclick="exportarExcel()">📥 Descargar Excel</button>
-        <button class="btn-main" id="btnAdmin" onclick="openOverlay('overlayLogin')">🔐 Acceso Admin</button>
+<div class="mode-banner" id="modeBanner">
+    <span id="modeText">👤 Vista Participante</span>
+    <div>
+        <button class="btn-admin" id="btnAdmin" onclick="openOverlay('overlayLogin')">Acceso Admin</button>
     </div>
 </div>
 
 <div class="flyer">
     <div class="header">
-        <p style="letter-spacing: 3px; font-size: 14px">✦ GRAN RIFA SOLIDARIA ✦</p>
-        <h1 class="title">JUNTOS POR JUAN PABLO<span>El Cariño Que Nos Une</span></h1>
+        <p>✦ Una causa con corazón ✦</p>
+        <h1 class="title">RIFA SOLIDARIA<span>El Cariño Que Nos Une</span></h1>
     </div>
 
-    <div class="content-section">
-        <h3 class="section-title">Nuestra Causa</h3>
-        <p style="line-height: 1.6; color: #555;">
-            Esta rifa nace con el propósito de apoyar a <strong>Juan Pablo</strong> en su proceso de recuperación y tratamiento médico. 
-            Cada número que elijas es un grano de arena que contribuye directamente a mejorar su calidad de vida y costear sus terapias. 
-            ¡Agradecemos de todo corazón tu solidaridad!
-        </p>
+    <div class="context-box">
+        <p>Queremos ayudar y apoyar a una gran persona: <strong>Juan Pablo Gómez</strong>, para que viva con la comodidad y autonomía que merece.</p>
+        <p>Todo lo recaudado será para mejorar su hogar y fortalecer sus herramientas de vida diaria.</p>
+        <p>Deseamos recordarle que no está solo y que cuenta con personas que lo estiman y lo quieren.</p>
+        <p style="text-align: center; font-weight: 700; margin-top: 15px;">¡Tu apoyo hace la diferencia! 🤝</p>
     </div>
 
-    <div class="grid-info">
-        <div class="content-section" style="border-right: 1px solid var(--beige)">
-            <h3 class="section-title">Premios a Sortear</h3>
-            <div class="premio-item"><div class="premio-num">1</div> $100.000 en Efectivo</div>
-            <div class="premio-item"><div class="premio-num">2</div> Canasta Familiar Premium</div>
-            <div class="premio-item"><div class="premio-num">3</div> Set de Parrilla Completo</div>
-            <div class="premio-item"><div class="premio-num">4</div> Cena para 2 en Restaurant</div>
-            <p style="font-size: 12px; color: var(--gris); margin-top: 15px;">* Sorteo: 30 de Mayo de 2025</p>
+    <div class="price-band">
+        Valor del número $2.000 ✦ 4 increíbles premios ✦
+    </div>
+
+    <div class="info-grid">
+        <div class="info-col">
+            <h3>🏆 Premios:</h3>
+            <div class="premio-item"><strong>1° Premio</strong><span>Fogón con disco para cocinar</span></div>
+            <div class="premio-item"><strong>2° Premio</strong><span>Gift Card $50.000</span></div>
+            <div class="premio-item"><strong>3° Premio</strong><span>Estufa Cuarzo NEX (eléctrica)</span></div>
+            <div class="premio-item"><strong>4° Premio</strong><span>Canasta Útiles de Aseo</span></div>
+            <p style="font-size: 11px; color: #777; margin-top: 10px;">*La imagen es referencial</p>
         </div>
-
-        <div class="content-section">
-            <h3 class="section-title">Datos de Transferencia</h3>
-            <div class="transfer-card">
-                <p><strong>Banco:</strong> Banco de Crédito</p>
-                <p><strong>Tipo:</strong> Cuenta Corriente</p>
-                <p><strong>Número:</strong> 123-456789-00</p>
-                <p><strong>Titular:</strong> Juan Pablo Pérez</p>
-                <p><strong>Rut:</strong> 12.345.678-9</p>
-                <p><strong>Correo:</strong> contacto@ayuda.cl</p>
+        <div class="info-col">
+            <h3>💳 Datos para transferir</h3>
+            <div class="transfer-data">
+                <p><strong>Nombre:</strong> <span>Juan Pablo Gómez</span></p>
+                <p><strong>RUT:</strong> <span>12.654.815-k</span></p>
+                <p><strong>Banco:</strong> <span>Banco Estado</span></p>
+                <p><strong>Cuenta:</strong> <span>Cuenta Rut</span></p>
+                <p><strong>Correo:</strong> <span>lastra.n.c@gmail.com</span></p>
             </div>
-            <p style="font-size: 11px; margin-top: 10px; color: #888">Envía tu comprobante vía WhatsApp al reservar.</p>
         </div>
     </div>
 
-    <div class="price-band">VALOR NÚMERO: $2.000</div>
+    <div class="comprobante-box">
+        📲 Después de hacer la transferencia, envía el comprobante de pago del total de números elegidos para poder confirmar tu número.
+    </div>
+
+    <div class="mini-banner-azul">
+        Rifa Solidaria &nbsp;·&nbsp; El Cariño Que Nos Une &nbsp;·&nbsp; ¡Gracias por tu apoyo!
+    </div>
+
+    <div class="fecha-sorteo">
+        📅 Fecha del sorteo: 31 de Mayo 2026
+    </div>
 </div>
 
 <div class="numeros-wrap">
-    <h2 style="text-align:center; font-family:'Playfair Display'; margin-bottom: 5px">📋 Elige tu número</h2>
-    <p style="text-align:center; font-size: 14px; color: #666">Haz clic en un número disponible para reservarlo</p>
-    
+    <h2 style="text-align:center; font-family:'Playfair Display'">Elige tus números</h2>
     <div class="num-grid" id="grid"></div>
-    
-    <div style="display:flex; justify-content:center; gap:20px; font-size:13px; font-weight: bold">
-        <span style="display:flex; align-items:center; gap:5px"><div style="width:15px;height:15px;background:#fff;border:1px solid #ccc"></div> Disponible</span>
-        <span style="display:flex; align-items:center; gap:5px"><div style="width:15px;height:15px;background:#fef3c7;border:1px solid var(--dorado)"></div> Reservado</span>
-        <span style="display:flex; align-items:center; gap:5px"><div style="width:15px;height:15px;background:#dcfce7;border:1px solid #16a34a"></div> Pagado</span>
+    <div style="display:flex; justify-content:center; gap:15px; font-size:12px; font-weight: 700">
+        <span style="color:#666">⚪ Libre</span>
+        <span style="color:#b45309">🟡 Reservado</span>
+        <span style="color:#15803d">🟢 Pagado</span>
     </div>
 </div>
 
 <div class="overlay" id="overlayLogin">
     <div class="modal">
-        <h3>Acceso Administrador</h3>
+        <h3>Panel Administrativo</h3>
         <input type="password" id="passInput" placeholder="Contraseña">
         <div class="modal-btns">
-            <button style="background:#eee" onclick="closeOverlay('overlayLogin')">Cancelar</button>
-            <button style="background:var(--carbon);color:#fff" onclick="checkPass()">Entrar</button>
+            <button style="background:#eee" onclick="closeOverlay('overlayLogin')">Cerrar</button>
+            <button style="background:var(--carbon);color:white" onclick="checkPass()">Entrar</button>
         </div>
     </div>
 </div>
 
 <div class="overlay" id="overlayReserva">
     <div class="modal">
-        <h3>Reservar número <span id="rNum" style="color:var(--dorado)"></span></h3>
-        <p style="font-size:12px;margin:10px 0">Ingresa tus datos para registrar la reserva</p>
-        <input type="text" id="rNombre" placeholder="Tu nombre completo">
-        <input type="tel" id="rTel" placeholder="Tu teléfono/WhatsApp">
+        <h3>Reservar Número <span id="rNum" style="color:var(--dorado)"></span></h3>
+        <input type="text" id="rNombre" placeholder="Tu Nombre">
+        <input type="tel" id="rTel" placeholder="Tu Teléfono">
         <div class="modal-btns">
             <button style="background:#eee" onclick="closeOverlay('overlayReserva')">Cancelar</button>
-            <button style="background:var(--carbon);color:#fff" onclick="confirmarReserva()">Confirmar</button>
+            <button style="background:var(--carbon);color:white" onclick="confirmarReserva()">Reservar</button>
         </div>
     </div>
 </div>
 
-<div class="tabla-wrap" id="tablaWrap">
-    <div style="background:var(--carbon); color:white; padding:15px; font-weight:700">Panel de Control - Participantes</div>
-    <table id="tablaParticipantes">
-        <thead>
-            <tr>
-                <th>N°</th><th>Nombre</th><th>Teléfono</th><th>Estado</th><th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="tablaBody"></tbody>
-    </table>
+<div id="adminPanel" style="display:none; width:860px; max-width:100%; background:white; border:3px solid var(--dorado); padding:20px; margin-bottom:40px">
+    <h3>Gestión de Números</h3>
+    <div style="overflow-x:auto">
+        <table style="width:100%; border-collapse:collapse; margin-top:15px">
+            <thead>
+                <tr style="background:var(--carbon); color:white; font-size:13px">
+                    <th style="padding:10px">N°</th><th>Nombre</th><th>Teléfono</th><th>Estado</th><th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="adminTableBody"></tbody>
+        </table>
+    </div>
+    <button onclick="exportarExcel()" style="margin-top:20px; padding:10px; background:var(--dorado); border:none; font-weight:700; cursor:pointer">📥 Descargar Excel</button>
 </div>
 
 <script>
-    const ADMIN_PASS = "JuanPablo2025"; 
-    const STORAGE_KEY = "rifa_solidaria_v2";
-    
+    const ADMIN_PASS = "JuanPablo2025";
+    const STORAGE_KEY = "rifa_jp_gomez";
     let isAdmin = false;
     let pendingNum = null;
     let rifaData = {};
@@ -196,9 +194,8 @@
     window.onload = () => {
         const saved = localStorage.getItem(STORAGE_KEY);
         if(saved) rifaData = JSON.parse(saved);
-        
         for(let i=1; i<=100; i++) {
-            if(!rifaData[i]) rifaData[i] = { estado: 'libre', nombre: '', tel: '' };
+            if(!rifaData[i]) rifaData[i] = { estado:'libre', nombre:'', tel:'' };
         }
         renderGrid();
     };
@@ -206,114 +203,102 @@
     function renderGrid() {
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
-        for(let i=1; i<=100; i++) {
+        for(let i=1; i<=100; i++){
             const d = rifaData[i];
             const btn = document.createElement('button');
             btn.className = `num-btn ${d.estado}`;
             btn.innerHTML = `<span>${i}</span><span class="na">${d.nombre.split(' ')[0]}</span>`;
-            btn.onclick = () => handleNumClick(i);
+            btn.onclick = () => handleBtn(i);
             grid.appendChild(btn);
         }
     }
 
-    function handleNumClick(num) {
-        if(isAdmin) return; // En modo admin se gestiona desde la tabla
-        
-        const d = rifaData[num];
-        if(d.estado === 'libre') {
-            pendingNum = num;
-            document.getElementById('rNum').innerText = num;
-            openOverlay('overlayReserva');
-        } else {
-            showToast(`El número ${num} ya está ${d.estado}`, 'info');
+    function handleBtn(n) {
+        if(isAdmin) return;
+        if(rifaData[n].estado !== 'libre') {
+            showToast("Número ya ocupado", "#1e40af");
+            return;
         }
+        pendingNum = n;
+        document.getElementById('rNum').innerText = n;
+        openOverlay('overlayReserva');
     }
 
     function confirmarReserva() {
         const nom = document.getElementById('rNombre').value;
         const tel = document.getElementById('rTel').value;
-        if(!nom || !tel) return showToast("Por favor completa los datos", "err");
-
-        rifaData[pendingNum] = { estado: 'reservado', nombre: nom, tel: tel };
-        saveAndRefresh();
+        if(!nom || !tel) return alert("Faltan datos");
+        rifaData[pendingNum] = { estado:'reservado', nombre:nom, tel:tel };
+        save();
         closeOverlay('overlayReserva');
-        showToast("¡Reserva realizada! Envía tu comprobante.", "ok");
-        document.getElementById('rNombre').value = '';
-        document.getElementById('rTel').value = '';
+        showToast("¡Reservado! Envía tu comprobante", "#166534");
     }
 
     function checkPass() {
-        if(document.getElementById('passInput').value === ADMIN_PASS) {
+        if(document.getElementById('passInput').value === ADMIN_PASS){
             isAdmin = true;
-            document.getElementById('modeBanner').className = "mode-banner admin";
-            document.getElementById('modeText').innerText = "🔐 PANEL DE ADMINISTRADOR";
-            document.getElementById('btnAdmin').innerText = "Cerrar Sesión";
+            document.getElementById('modeBanner').classList.add('admin');
+            document.getElementById('modeText').innerText = "🔐 PANEL ADMINISTRADOR";
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('btnAdmin').innerText = "Salir";
             document.getElementById('btnAdmin').onclick = () => location.reload();
-            document.getElementById('tablaWrap').style.display = "block";
             closeOverlay('overlayLogin');
-            renderTabla();
-            showToast("Acceso concedido", "ok");
+            renderAdminTable();
         } else {
-            showToast("Contraseña incorrecta", "err");
+            alert("Contraseña incorrecta");
         }
     }
 
-    function renderTabla() {
-        const tbody = document.getElementById('tablaBody');
+    function renderAdminTable() {
+        const tbody = document.getElementById('adminTableBody');
         tbody.innerHTML = '';
-        Object.keys(rifaData).forEach(num => {
-            const d = rifaData[num];
+        Object.keys(rifaData).forEach(n => {
+            const d = rifaData[n];
             if(d.estado === 'libre') return;
-            
             const tr = document.createElement('tr');
+            tr.style.borderBottom = "1px solid #eee";
             tr.innerHTML = `
-                <td><b>${num}</b></td>
+                <td style="padding:10px"><b>${n}</b></td>
                 <td>${d.nombre}</td>
                 <td>${d.tel}</td>
-                <td><span style="color:${d.estado === 'pagado' ? 'green' : 'orange'}">${d.estado.toUpperCase()}</span></td>
+                <td style="color:${d.estado==='pagado'?'green':'orange'}">${d.estado.toUpperCase()}</td>
                 <td>
-                    ${d.estado === 'reservado' ? `<button onclick="cambiarEstado(${num},'pagado')" style="background:#16a34a; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer">Marcar Pagado</button>` : ''}
-                    <button onclick="cambiarEstado(${num},'libre')" style="background:#dc2626; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer">Liberar</button>
+                    <button onclick="setEstado(${n},'pagado')" style="background:#dcfce7; border:1px solid #86efac; cursor:pointer">✔</button>
+                    <button onclick="setEstado(${n},'libre')" style="background:#fee2e2; border:1px solid #fca5a5; cursor:pointer">✘</button>
                 </td>
             `;
             tbody.appendChild(tr);
         });
     }
 
-    function cambiarEstado(num, nuevo) {
-        if(nuevo === 'libre') {
-            rifaData[num] = { estado: 'libre', nombre: '', tel: '' };
-        } else {
-            rifaData[num].estado = nuevo;
-        }
-        saveAndRefresh();
-        renderTabla();
+    function setEstado(n, est) {
+        if(est === 'libre') rifaData[n] = { estado:'libre', nombre:'', tel:'' };
+        else rifaData[n].estado = est;
+        save();
+        renderAdminTable();
     }
 
-    function saveAndRefresh() {
+    function save() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(rifaData));
         renderGrid();
     }
 
     function exportarExcel() {
-        const rows = [["Número", "Nombre", "Teléfono", "Estado"]];
-        Object.keys(rifaData).forEach(num => {
-            const d = rifaData[num];
-            if(d.estado !== 'libre') rows.push([num, d.nombre, d.tel, d.estado]);
+        let rows = [["Número", "Nombre", "Teléfono", "Estado"]];
+        Object.keys(rifaData).forEach(n => {
+            if(rifaData[n].estado !== 'libre') rows.push([n, rifaData[n].nombre, rifaData[n].tel, rifaData[n].estado]);
         });
         const ws = XLSX.utils.aoa_to_sheet(rows);
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Rifa_JuanPablo");
-        XLSX.writeFile(wb, "Listado_Rifa.xlsx");
+        XLSX.utils.book_append_sheet(wb, ws, "Rifa");
+        XLSX.writeFile(wb, "Rifa_JuanPablo.xlsx");
     }
 
     function openOverlay(id) { document.getElementById(id).classList.add('open'); }
     function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
-    
-    function showToast(msg, type) {
+    function showToast(m, c) {
         const t = document.getElementById('toast');
-        t.innerText = msg;
-        t.className = `toast show ${type}`;
+        t.innerText = m; t.style.background = c; t.classList.add('show');
         setTimeout(() => t.classList.remove('show'), 3000);
     }
 </script>
