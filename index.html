@@ -1,590 +1,284 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rifa Solidaria — El Cariño Que Nos Une</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--carbon:#1E2A35;--dorado:#C9A84C;--dorado-l:#E8C97A;--crema:#F5F0E8;--beige:#E8DFC8;--blanco:#fff;--gris:#6B7280}
-html,body{min-height:100%;overflow-y:auto}
-body{background:#c8bc9e;font-family:'Lato',sans-serif;padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:20px;min-height:100vh}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rifa Solidaria — El Cariño Que Nos Une</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        /* Estilos Base y Variables */
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        :root{--carbon:#1E2A35;--dorado:#C9A84C;--dorado-l:#E8C97A;--crema:#F5F0E8;--beige:#E8DFC8;--blanco:#fff;--gris:#6B7280}
+        body{background:#c8bc9e;font-family:'Lato',sans-serif;padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:20px;min-height:100vh}
 
-/* BANNER */
-.mode-banner{width:860px;max-width:100%;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;border-radius:6px;font-size:13px;font-weight:700;gap:8px;flex-wrap:wrap}
-.mode-banner.participante{background:#dbeafe;color:#1e40af;border:1.5px solid #93c5fd}
-.mode-banner.admin{background:#dcfce7;color:#166534;border:1.5px solid #86efac}
-.banner-btns{display:flex;gap:8px;flex-wrap:wrap}
-.banner-btns button{padding:6px 13px;border-radius:4px;border:none;cursor:pointer;font-family:'Lato',sans-serif;font-size:12px;font-weight:700}
-.mode-banner.participante .btn-main{background:#1e40af;color:#fff}
-.mode-banner.admin .btn-main{background:#166534;color:#fff}
-.btn-export{background:var(--dorado);color:var(--carbon);display:none}
-.mode-banner.admin .btn-export{display:inline-block}
+        /* Banner de Modo */
+        .mode-banner{width:860px;max-width:100%;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-radius:8px;font-size:13px;font-weight:700;gap:8px;flex-wrap:wrap}
+        .mode-banner.participante{background:#dbeafe;color:#1e40af;border:1.5px solid #93c5fd}
+        .mode-banner.admin{background:#dcfce7;color:#166534;border:1.5px solid #86efac}
+        
+        .banner-btns{display:flex;gap:8px}
+        button{cursor:pointer;font-family:inherit;transition: all 0.2s}
+        .btn-main{padding:8px 16px; border-radius:6px; border:none; font-weight:700}
+        .mode-banner.participante .btn-main{background:#1e40af;color:#fff}
+        .mode-banner.admin .btn-main{background:#166534;color:#fff}
+        .btn-export{background:var(--dorado); color:var(--carbon); padding:8px 16px; border-radius:6px; border:none; font-weight:700; display:none}
+        .mode-banner.admin .btn-export{display:inline-block}
 
-/* FLYER */
-.flyer{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);box-shadow:0 20px 60px rgba(0,0,0,.3),inset 0 0 0 8px var(--crema),inset 0 0 0 10px var(--dorado)}
-.header{background:var(--carbon);padding:28px 44px 20px;text-align:center}
-.header::after{content:'';display:block;width:60%;height:2px;background:linear-gradient(90deg,transparent,var(--dorado),transparent);margin:14px auto 0}
-.subt{font-size:10px;letter-spacing:5px;color:var(--dorado-l);text-transform:uppercase;margin-bottom:6px;font-weight:300}
-.title{font-family:'Playfair Display',serif;font-size:36px;font-weight:900;color:#fff;line-height:1.1}
-.title span{color:var(--dorado-l);display:block;font-size:26px;font-style:italic}
-.desc-wrap{padding:20px 44px;background:var(--blanco);border-bottom:1px solid var(--beige);text-align:center}
-.desc{font-size:13.5px;color:#3a3a3a;line-height:1.8}
-.desc strong{font-size:15px;color:var(--carbon)}
-.cta{font-weight:700;color:var(--carbon);letter-spacing:1px}
-.price-band{background:var(--dorado);padding:12px 44px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
-.lbl{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--carbon)}
-.amt{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--carbon)}
-.sep{width:1px;height:26px;background:rgba(0,0,0,.2)}
-.content{display:grid;grid-template-columns:1fr 1fr}
-.premios-section{padding:22px 22px 22px 38px;border-right:1px solid var(--beige)}
-.transfer-section{padding:22px 38px 22px 22px}
-.sec-title{font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--carbon);margin-bottom:14px;padding-bottom:7px;border-bottom:2px solid var(--dorado)}
+        /* Flyer Principal */
+        .flyer{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+        .header{background:var(--carbon);padding:30px;text-align:center;color:white}
+        .title{font-family:'Playfair Display',serif;font-size:32px;margin-top:10px}
+        .title span{color:var(--dorado-l);display:block;font-size:22px;font-style:italic}
+        
+        .price-band{background:var(--dorado);padding:15px;display:flex;justify-content:center;align-items:center;gap:20px;font-weight:900;font-size:20px}
+        
+        /* Grilla de Números */
+        .numeros-wrap{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);padding:20px}
+        .num-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin:20px 0}
+        
+        .num-btn{aspect-ratio:1;border:1.5px solid #d0c8b0;background:#fff;border-radius:6px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:0.2s}
+        .num-btn:hover{transform:scale(1.1);z-index:2}
+        .num-btn.reservado{background:#fef3c7;border-color:var(--dorado);color:#92400e}
+        .num-btn.pagado{background:#dcfce7;border-color:#16a34a;color:#166534}
+        .num-btn .na{font-size:8px;font-weight:400;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* PRIZE CARDS */
-.prize-card{display:flex;gap:10px;align-items:stretch;margin-bottom:11px;background:var(--blanco);border:1px solid #e8e0d0;border-left:3px solid var(--dorado);overflow:hidden}
-.prize-img{width:80px;min-width:80px;height:80px;object-fit:cover;display:block}
-.prize-img-double{width:80px;min-width:80px;height:80px;display:grid;grid-template-rows:1fr 1fr;overflow:hidden}
-.prize-img-double img{width:80px;height:40px;object-fit:cover;display:block}
-.prize-img-double img:first-child{border-bottom:1px solid #e8e0d0}
-.prize-info{flex:1;padding:8px 8px 8px 0;display:flex;flex-direction:column;justify-content:center}
-.prize-num{font-size:8px;font-weight:700;letter-spacing:2px;color:var(--dorado);text-transform:uppercase;margin-bottom:3px}
-.prize-name{font-family:'Playfair Display',serif;font-size:14px;font-weight:700;color:var(--carbon);line-height:1.3}
-.prize-note{font-size:9px;color:var(--gris);margin-top:4px;font-style:italic}
-.ref-label{font-size:7px;background:rgba(30,42,53,0.85);color:#E8C97A;text-align:center;padding:2px;line-height:1.3}
+        /* Modales y Toasts */
+        .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center}
+        .overlay.open{display:flex}
+        .modal{background:#fff;padding:30px;border-radius:12px;width:350px;text-align:center}
+        .modal input{width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:4px}
+        .modal-btns{display:flex;gap:10px;margin-top:15px}
+        .modal-btns button{flex:1;padding:10px;border-radius:6px;border:none;font-weight:700}
+        
+        .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:8px;color:#fff;font-weight:700;opacity:0;transition:0.3s;z-index:2000}
+        .toast.show{opacity:1}
+        .ok{background:#166534} .err{background:#991b1b} .info{background:#1e40af}
 
-/* TRANSFER */
-.t-table{width:100%;border-collapse:collapse;margin-bottom:12px}
-.t-table tr{border-bottom:1px solid var(--beige)}
-.t-table tr:last-child{border:none}
-.t-table td{padding:8px 5px;font-size:12px;vertical-align:middle}
-.t-table td:first-child{font-weight:700;color:var(--carbon);width:76px;font-size:10px;letter-spacing:1px;text-transform:uppercase}
-.email{color:#2563eb;font-weight:600;word-break:break-all}
-.tip-box{background:var(--beige);border:1px dashed var(--dorado);padding:11px;text-align:center;border-radius:4px;font-size:10.5px;color:#3a3a3a;line-height:1.7;margin-bottom:10px}
-.sorteo-box{background:var(--carbon);border:1px solid var(--dorado);padding:11px;text-align:center;border-radius:4px}
-.sorteo-box p{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dorado-l);margin-bottom:3px}
-.sorteo-box strong{font-family:'Playfair Display',serif;font-size:16px;color:#fff;display:block}
+        /* Tabla Admin */
+        .tabla-wrap{width:860px;max-width:100%;background:#fff;border:3px solid var(--dorado);margin-top:20px;display:none;overflow:hidden}
+        table{width:100%;border-collapse:collapse}
+        th{background:var(--carbon);color:var(--dorado);padding:12px;font-size:12px;text-align:left}
+        td{padding:12px;border-bottom:1px solid #eee;font-size:13px}
+        .badge{padding:4px 8px;border-radius:4px;font-size:11px;font-weight:700}
+        .badge.reservado{background:#fef3c7;color:#92400e}
+        .badge.pagado{background:#dcfce7;color:#166534}
 
-.footer{background:var(--carbon);padding:12px 44px;text-align:center}
-.footer p{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase}
-.footer strong{color:var(--dorado-l)}
-
-/* NÚMEROS */
-.numeros-wrap{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);box-shadow:0 20px 60px rgba(0,0,0,.3),inset 0 0 0 8px var(--crema),inset 0 0 0 10px var(--dorado)}
-.num-header{background:var(--carbon);padding:15px 32px;text-align:center}
-.num-header h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#fff}
-.num-header p{font-size:10px;letter-spacing:3px;color:var(--dorado-l);text-transform:uppercase;margin-top:3px}
-.num-grid-wrap{padding:18px 22px 14px}
-.num-legend{display:flex;gap:16px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
-.leg-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gris)}
-.leg-dot{width:15px;height:15px;border-radius:3px}
-.leg-libre{background:var(--blanco);border:1.5px solid #ccc}
-.leg-reservado{background:#fef3c7;border:1.5px solid var(--dorado)}
-.leg-pagado{background:#dcfce7;border:1.5px solid #16a34a}
-.num-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
-.num-btn{aspect-ratio:1;border:1.5px solid #d0c8b0;background:var(--blanco);border-radius:6px;font-size:11px;font-weight:700;color:var(--carbon);cursor:pointer;font-family:'Lato',sans-serif;transition:all .15s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:2px}
-.num-btn:hover:not(.pagado){background:var(--beige);border-color:var(--dorado);transform:scale(1.1);z-index:1}
-.num-btn.reservado{background:#fef3c7;border-color:var(--dorado);color:#92400e}
-.num-btn.pagado{background:#dcfce7;border-color:#16a34a;color:#166534;cursor:default}
-.num-btn .n{font-size:12px;font-weight:700;line-height:1}
-.num-btn .na{font-size:6px;font-weight:400;opacity:.8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;text-align:center;padding:0 2px}
-.instruc{text-align:center;font-size:11px;color:var(--gris);margin-top:11px;letter-spacing:.5px}
-.resumen{background:var(--beige);border-top:1px solid #d0c8b0;padding:13px 22px;display:flex;gap:22px;justify-content:center;flex-wrap:wrap}
-.res-item{text-align:center}
-.res-num{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--carbon)}
-.res-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gris)}
-
-/* TABLA ADMIN */
-.tabla-wrap{width:860px;max-width:100%;background:var(--crema);border:3px solid var(--dorado);box-shadow:0 10px 30px rgba(0,0,0,.2);display:none}
-.tabla-header{background:var(--carbon);padding:13px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.tabla-header h3{font-family:'Playfair Display',serif;font-size:17px;color:#fff}
-.tabla-header span{font-size:10px;color:var(--dorado-l);letter-spacing:2px;text-transform:uppercase}
-#tablaParticipantes{width:100%;border-collapse:collapse;font-size:12px}
-#tablaParticipantes th{background:var(--carbon);color:var(--dorado-l);padding:9px 12px;text-align:left;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
-#tablaParticipantes td{padding:8px 12px;border-bottom:1px solid var(--beige);vertical-align:middle}
-#tablaParticipantes tr:hover td{background:var(--beige)}
-.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
-.badge.reservado{background:#fef3c7;color:#92400e;border:1px solid var(--dorado)}
-.badge.pagado{background:#dcfce7;color:#166534;border:1px solid #86efac}
-.btn-accion{padding:3px 10px;border:none;border-radius:3px;cursor:pointer;font-size:10px;font-weight:700;font-family:'Lato',sans-serif;margin:0 2px}
-.btn-pagar{background:#dcfce7;color:#166534;border:1px solid #86efac}
-.btn-liberar{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
-
-/* TOAST */
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);padding:11px 22px;border-radius:6px;font-size:13px;font-weight:700;color:#fff;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:340px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.toast.show{opacity:1}
-.toast.ok{background:#166534}.toast.err{background:#991b1b}.toast.info{background:#1e40af}
-
-/* MODALES */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center}
-.overlay.open{display:flex}
-.modal{background:var(--crema);border:2px solid var(--dorado);padding:26px 30px;width:360px;max-width:95vw;border-radius:8px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.modal h3{font-family:'Playfair Display',serif;font-size:18px;color:var(--carbon);margin-bottom:5px}
-.modal .sub{font-size:12px;color:var(--gris);margin-bottom:14px;line-height:1.5}
-.modal input{width:100%;padding:9px 12px;font-size:14px;border:1.5px solid #d0c8b0;border-radius:4px;background:var(--blanco);font-family:'Lato',sans-serif;margin-bottom:9px;outline:none}
-.modal input:focus{border-color:var(--dorado)}
-.modal .err{color:#dc2626;font-size:11px;margin-bottom:7px;display:none}
-.modal-btns{display:flex;gap:8px;margin-top:4px}
-.modal-btns button{flex:1;padding:9px;border:none;border-radius:4px;cursor:pointer;font-family:'Lato',sans-serif;font-weight:700;font-size:12px}
-.btn-ok{background:var(--carbon);color:#fff}.btn-ok:hover{background:#111}
-.btn-cancel{background:var(--beige);color:var(--carbon)}.btn-cancel:hover{background:#d0c8b0}
-.admin-act-btns{display:flex;flex-direction:column;gap:7px;margin-top:10px}
-.admin-act-btns button{padding:9px;border:none;border-radius:4px;cursor:pointer;font-family:'Lato',sans-serif;font-weight:700;font-size:12px}
-
-@media(max-width:600px){
-  .flyer,.numeros-wrap,.mode-banner,.tabla-wrap{width:100%}
-  .content{grid-template-columns:1fr}
-  .transfer-section{border-top:1px solid var(--beige);padding:18px}
-  .premios-section{padding:18px}
-  .sep{display:none}
-}
-</style>
+        @media(max-width:600px){
+            .num-grid{grid-template-columns:repeat(5,1fr)}
+            .title{font-size:24px}
+        }
+    </style>
 </head>
 <body>
 
-<div class="toast" id="toast"></div>
+<div id="toast" class="toast"></div>
 
-<!-- BANNER -->
 <div class="mode-banner participante" id="modeBanner">
-  <span id="modeText">👤 Modo Participante — elige y reserva tu número</span>
-  <div class="banner-btns">
-    <button class="btn-export" onclick="exportarExcel()">📥 Descargar Excel</button>
-    <button class="btn-main" id="btnAdmin" onclick="openOverlay('overlayLogin')">🔐 Admin</button>
-  </div>
+    <span id="modeText">👤 Modo Participante — Elige tu número</span>
+    <div class="banner-btns">
+        <button class="btn-export" onclick="exportarExcel()">📥 Excel</button>
+        <button class="btn-main" id="btnAdmin" onclick="openOverlay('overlayLogin')">🔐 Admin</button>
+    </div>
 </div>
 
-<!-- MODAL LOGIN -->
 <div class="overlay" id="overlayLogin">
-  <div class="modal">
-    <h3>🔐 Acceso Administrador</h3>
-    <p class="sub">Ingresa la contraseña para confirmar pagos y gestionar los números</p>
-    <input type="password" id="passInput" placeholder="Contraseña" onkeydown="if(event.key==='Enter')checkPass()">
-    <p class="err" id="passErr">❌ Contraseña incorrecta</p>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeOverlay('overlayLogin')">Cancelar</button>
-      <button class="btn-ok" onclick="checkPass()">Entrar</button>
+    <div class="modal">
+        <h3>Acceso Administrador</h3>
+        <input type="password" id="passInput" placeholder="Contraseña">
+        <div class="modal-btns">
+            <button style="background:#eee" onclick="closeOverlay('overlayLogin')">Cancelar</button>
+            <button style="background:var(--carbon);color:#fff" onclick="checkPass()">Entrar</button>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- MODAL RESERVA -->
 <div class="overlay" id="overlayReserva">
-  <div class="modal">
-    <h3>Reservar número <span id="rNum" style="color:var(--dorado);font-size:22px"></span></h3>
-    <p class="sub">Completa tus datos — te contactaremos para confirmar el pago</p>
-    <input type="text" id="rNombre" placeholder="Tu nombre completo" maxlength="30">
-    <input type="tel" id="rTel" placeholder="Tu teléfono (ej: +56912345678)" maxlength="20">
-    <p class="err" id="rErr">⚠️ Completa nombre y teléfono</p>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeOverlay('overlayReserva')">Cancelar</button>
-      <button class="btn-ok" onclick="confirmarReserva()">✅ Reservar</button>
+    <div class="modal">
+        <h3>Reservar número <span id="rNum" style="color:var(--dorado)"></span></h3>
+        <p style="font-size:12px;margin-bottom:10px">Ingresa tus datos para contactarte</p>
+        <input type="text" id="rNombre" placeholder="Tu nombre completo">
+        <input type="tel" id="rTel" placeholder="Tu teléfono">
+        <div class="modal-btns">
+            <button style="background:#eee" onclick="closeOverlay('overlayReserva')">Cancelar</button>
+            <button style="background:var(--carbon);color:#fff" onclick="confirmarReserva()">Confirmar Reserva</button>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- MODAL ADMIN ACCIÓN -->
-<div class="overlay" id="overlayAdminAct">
-  <div class="modal">
-    <h3>Número <span id="aN" style="color:var(--dorado)"></span></h3>
-    <p id="aInfo" style="font-size:13px;color:var(--carbon);margin:6px 0 2px;font-weight:700"></p>
-    <p id="aDetail" style="font-size:11px;color:var(--gris);margin-bottom:2px"></p>
-    <p id="aTel" style="font-size:11px;color:var(--gris)"></p>
-    <div class="admin-act-btns" id="adminActBtns"></div>
-    <div class="modal-btns" style="margin-top:10px">
-      <button class="btn-cancel" style="width:100%" onclick="closeOverlay('overlayAdminAct')">Cerrar</button>
-    </div>
-  </div>
-</div>
-
-<!-- FLYER -->
 <div class="flyer">
-  <div class="header">
-    <p class="subt">✦ Una causa con corazón ✦</p>
-    <h1 class="title">RIFA SOLIDARIA<span>El Cariño Que Nos Une</span></h1>
-  </div>
-  <div class="desc-wrap">
-    <p class="desc">Queremos ayudar y apoyar a una gran persona <strong>"JUAN PABLO"</strong>, para que viva con la comodidad y autonomía que merece.<br>
-    Todo lo recaudado será para mejorar su hogar y fortalecer sus herramientas de vida diaria.<br>
-    Deseamos recordarle que no está solo y que cuenta con personas que lo estiman y lo quieren.<br>
-    <span class="cta">¡Tu apoyo hace la diferencia! 🤝</span></p>
-  </div>
-  <div class="price-band">
-    <span class="lbl">Valor del número</span><span class="sep"></span>
-    <span class="amt">$2.000</span><span class="sep"></span>
-    <span class="lbl">✦ 4 increíbles premios ✦</span>
-  </div>
-  <div class="content">
-    <div class="premios-section">
-      <p class="sec-title">🏆 Premios</p>
-
-      <!-- 1° PREMIO: Fogón + Disco en mismo cuadro -->
-      <div class="prize-card">
-        <div class="prize-img-double">
-          <img src="data:image/jpeg;base64,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" alt="Fogón">
-          <img src="data:image/jpeg;base64,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" alt="Disco">
-        </div>
-        <div class="prize-info">
-          <p class="prize-num">1° Premio</p>
-          <p class="prize-name">Fogón con disco para cocinar</p>
-        </div>
-      </div>
-
-      <!-- 2° PREMIO: Gift Card -->
-      <div class="prize-card">
-        <img class="prize-img" src="data:image/jpeg;base64,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" alt="Gift Card">
-        <div class="prize-info">
-          <p class="prize-num">2° Premio</p>
-          <p class="prize-name">Gift Card $50.000</p>
-        </div>
-      </div>
-
-      <!-- 3° PREMIO: Estufa -->
-      <div class="prize-card">
-        <img class="prize-img" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAB4AFoDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDh4CkqFXOCO9BCKeuaqQsSRt61M6yHoOawcdTvjNNXHNIAOwFMMg+pNRmJ/wCLj61JFHtUszINoyuTgn6U1EUqj9CKTLdai+6eMH1qRyp5Z2P4U3MYHc1aMZK/UjAq1aAbyP7wxUAK9l6epqWJgrKw6ZolsZJdRVULwO1WoODUEvyTMue9SIwBHNZvVEMvLTqiRqfmsiDTsoRbDYqgAKAARnjGa2JdN22bTGSMyLGsrRbOiMcA5/pVDzftDtKMncq5I5ydorR+3ytdvObcMkkXlNHg4K4Axn8KpNdT3+WXKuX+vIE0YlY3d1VXRW+WIs2SM7QB145qo+ll5544SXliRXEbQlHcdCQD6cVe/tKZmfzrQSIxBVRuXZgYGCOelUpbydJ3NvG0Bl4JBZmwOwJ5xVLlszNxq8yb/S3+ZUu7IWjLHIYzKRl0A/1Z9CfX+VVvLUn7i/8AfIrRvpXvLkztDsdgN+0HDHufxqv5bf3G/I1g3rodsIe6ubcqmGPvGh/4CKb5EP8Azyj/AO+RVsxOeiN/3yaTyJT0ik/75NK7KcIlcKinIRQfXaKu2thLd2xnWSNVEqxYI5yen86gNvN/zxl/74NWbO8uLKFovIlKs4f7vcdOoqoWv72xzYhNQ/dpX+RlalE1tO8L7S0blSVHXFU81b1WVprhpmUgyOW5qlmrSPHxa/efJHp3g/ym8P2piA5jG/8A3gSDW+PauZ8Bvu0FBjGx3X685/rXTgV2LYxerD8TVW7TE9tL/dcqfoR/iBVsCquosy2khTqg3flzVLcUtizjijFRxyMUBIB4p+891H50hhg0hz6mlL/7P60xpB/dNAaDXJAzk/nVOUnPLfrVl5A3r1xyKxNRMLSky3LxHadoDEZ5PoaBWMXx3xYWv/XY/wDoNcX+ddf47b/iXWf/AF2b9BXGbvesJrUTPR/h9JmwuY8/dlz+YH+FdDcarDbatb6fJG4M6grJxtySQB69vwyPWuU+Hkn+kXsZ5yit+pFauupqbXiTGG2e2jlRYeQJEYumHB688gjjj1rZbF9TpwKoai5EOFYAyHbyM8Y5rQbgMRXO+JpGVIUQsOeq9aYD7S9ujax8xkgbTlT1HHrT/tFxz8ic88Owrm4Jz5rxJLIPmzng5z9a0klZRy7n3qXe4R2NWO8kjB3Qlv8Atrn+YpG1VfNSNreVS5ABBBFZhuT/AHmp9m3nX0QLZAOenpQmxM2pR+7X/fX+Yqhcwu7g4X5Rjlck/pWhP/q1/wB5f51j6nqE0GoW1vF5DCYnKmQhwBn5sdMDA69c4FUwRznj8n7HY54Jkc/oK4rdXY/ECQtbafnGdz5x64Fcbmspbks7zwG2zWZE/vQH9CK1NciuF1RdQuNL+W3lRkuIJGcugb+JR0OD3GPesTwc+3xDb/7aOv6f/WrqvElqsjWd2qTvPbyBokjjDBiCDtJwSMjOD09atbFvc3d6vGGQ5VsEHpxWHrbw+efMjicqvAf19q3JD/Ouc1RTJcSMNuC2OR6VZLMqIQrfHNrncgI2yHjHFaH7nHMMw+jZqnJG63VuwGQ25OPpn+lWijDqXH4UmgTGMLc/89h+ANWdKRftTFHYgKeCuKqsj9mP41e0hGDSlvYUJCZqTn/Vj/bWsy6hRpVlW3heRR/rGVSRyehPIrRnOXjH+1/Q1g6nry2mrJY+QSvy75c425zyB3xjmkUc54/IK2AHHL/0rj8D3rrfH77nseR0fp9RXIZNQ9wsdf4Wk2eIrEkYJk2n8QRXbeIZ9WRUj0p4lDId+1lE2c4+UNxj9c1w2lgRatYS+k6Ee3Ndj4rgzNbTi4jgaMMMvdJDnDKwxuU55ANOOxUtzfDZhiPz8qPv/e6d/f1rAuVd3cl15kyq/wCzzn9a1LO4+0abaT/vP3sSt+8xu5A6471zk04F225Cu3IyQeTmtOhm9ye8kCxrIoH7uRWGGH0P86nM7Ef6tj9CKw5/nglwVyQTSxsWRWHcZoYGtJOe8bj8Kv6Ud0ZbBGX7iuaZn7MR+NdDogIsk3Ekksf1oQF+Q5mX2Un+n+NZt1bJPkvbQtgEB3Az17HritAcySN6YUfh/wDrqndzpE8cXAaZiq8egyTSKOH8d/6yxGAPkfgfUVyldV48bdc2P/XJv51ytZsaOjglKXMTH+GRT+Rr0DxG2ya0nN2luiGUsWhEu4bc8KeCeK874A5r0TXYbm7sLVrO3iuHVhJtk24HyHB+b0ODRAci1b3AuNMgmEzS5GC7R7CSMg5XscjGKru82/gRlM9yc07TopU0xYbyNY33OdiEEKCxI5HsaR7aP+/Jj61pchoRgjgqyqQeOgqrp6RNYxb4oyduD8o7cVM8dugy9wV+sgFZ8N1YQiRGv1ULI2MODxnNPmSWo1Tk3oh1/cQwSTgWSuIoBICFHJLYx0rTt3WNdqKFAHAHQVizappoz/pbufZCf6VXOvWihh/pEgPUbQM/rWftYrqarD1H9k6OKfqAdwznPrmq0sgd0RShI+bk8rng1hP4nXpHat+Lj+lVz4guSzNFaxIW6nJzUurEr2Elv+aM/wAd/wDH9aAdBE2P++q5etrxLNdXcsFxcKgAXYNn51i0XvqjNqzsbhPy4ODW0fE9+kSRrc4CKFGIx2GKKKi1+prGfJ0T9SBNb1C8kVPtk43jjt/KopnuX/1lxI/1YmiiplE1jXn0svkittbOc5/CgQyEkrkZooqEkDqzfUetux61IttzzRRVWRm5N7kgtCOx9qlS2yOlFFOyIbG3Fulzp11Gw+SNNwkxwrDkc/n+dct9nl/55tRRVrQhs//Z" alt="Estufa">
-        <div class="prize-info">
-          <p class="prize-num">3° Premio</p>
-          <p class="prize-name">Estufa Cuarzo NEX (eléctrica)</p>
-        </div>
-      </div>
-
-      <!-- 4° PREMIO: Canasta -->
-      <div class="prize-card">
-        <div style="position:relative;width:80px;min-width:80px;flex-shrink:0">
-          <img class="prize-img" src="data:image/jpeg;base64,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" alt="Canasta">
-          <div class="ref-label">⚠️ Imagen referencial</div>
-        </div>
-        <div class="prize-info">
-          <p class="prize-num">4° Premio</p>
-          <p class="prize-name">Canasta Útiles de Aseo</p>
-          <p class="prize-note">*La imagen es referencial</p>
-        </div>
-      </div>
+    <div class="header">
+        <p>✦ UNA CAUSA CON CORAZÓN ✦</p>
+        <h1 class="title">RIFA SOLIDARIA<span>El Cariño Que Nos Une</span></h1>
     </div>
-
-    <div class="transfer-section">
-      <p class="sec-title">💳 Datos para transferir</p>
-      <table class="t-table">
-        <tr><td>Nombre</td><td>Juan Pablo Gómez</td></tr>
-        <tr><td>RUT</td><td>12.654.815-k</td></tr>
-        <tr><td>Banco</td><td>Banco Estado</td></tr>
-        <tr><td>Cuenta</td><td>Cuenta Rut</td></tr>
-        <tr><td>Correo</td><td class="email">lastra.n.c@gmail.com</td></tr>
-      </table>
-      <div class="tip-box">
-        📲 Después de hacer la transferencia, envía el comprobante de pago del total de números elegidos para poder confirmar tu número.
-      </div>
-      <div class="sorteo-box">
-        <p>📅 Fecha del sorteo</p>
-        <strong>31 de Mayo 2026</strong>
-      </div>
+    <div style="padding:20px; text-align:center; background:white">
+        <p>Todo lo recaudado será para apoyar a <strong>JUAN PABLO</strong> y mejorar su calidad de vida.</p>
     </div>
-  </div>
-  <div class="footer"><p>Rifa Solidaria &nbsp;·&nbsp; <strong>El Cariño Que Nos Une</strong> &nbsp;·&nbsp; ¡Gracias por tu apoyo!</p></div>
+    <div class="price-band">VALOR NÚMERO: $2.000</div>
 </div>
 
-<!-- NÚMEROS -->
 <div class="numeros-wrap">
-  <div class="num-header">
-    <h2>📋 Selecciona tu número</h2>
-    <p>Valor: $2.000 · Del 1 al 100</p>
-  </div>
-  <div class="num-grid-wrap">
-    <div class="num-legend">
-      <div class="leg-item"><div class="leg-dot leg-libre"></div> Disponible</div>
-      <div class="leg-item"><div class="leg-dot leg-reservado"></div> Reservado</div>
-      <div class="leg-item"><div class="leg-dot leg-pagado"></div> Pagado ✓</div>
-    </div>
+    <h2 style="text-align:center; font-family:'Playfair Display'">📋 Elige tu número</h2>
     <div class="num-grid" id="grid"></div>
-    <p class="instruc" id="instruc">Haz clic en un número disponible para reservarlo con tu nombre y teléfono</p>
-  </div>
-  <div class="resumen">
-    <div class="res-item"><div class="res-num" id="cL">100</div><div class="res-lbl">Disponibles</div></div>
-    <div class="res-item"><div class="res-num" id="cR">0</div><div class="res-lbl">Reservados</div></div>
-    <div class="res-item"><div class="res-num" id="cP">0</div><div class="res-lbl">Pagados</div></div>
-    <div class="res-item"><div class="res-num" id="cT">$0</div><div class="res-lbl">Recaudado</div></div>
-  </div>
+    <div style="display:flex; justify-content:center; gap:15px; font-size:12px">
+        <span>⚪ Disponible</span>
+        <span>🟡 Reservado</span>
+        <span>🟢 Pagado</span>
+    </div>
 </div>
 
-<!-- TABLA ADMIN -->
 <div class="tabla-wrap" id="tablaWrap">
-  <div class="tabla-header">
-    <h3>📋 Control de Participantes</h3>
-    <span id="tablaResumen">—</span>
-  </div>
-  <div style="overflow-x:auto">
+    <div style="background:var(--carbon); color:white; padding:15px; font-weight:700">Control de Participantes</div>
     <table id="tablaParticipantes">
-      <thead>
-        <tr>
-          <th>N°</th><th>Nombre y Apellido</th><th>Teléfono</th>
-          <th>Estado</th><th>Fecha</th><th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="tablaBody"></tbody>
+        <thead>
+            <tr>
+                <th>N°</th><th>Nombre</th><th>Teléfono</th><th>Estado</th><th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tablaBody"></tbody>
     </table>
-  </div>
 </div>
 
 <script>
-const ADMIN_PASS  = "JuanPablo2025";
-const STORAGE_KEY = "rifa_data_v3";
+    const ADMIN_PASS = "JuanPablo2025"; // Cambia esta contraseña si gustas
+    const STORAGE_KEY = "rifa_solidaria_data";
+    
+    let isAdmin = false;
+    let pendingNum = null;
+    let rifaData = {};
 
-let isAdmin = false;
-let pendingNum = null;
-let data = {};
+    // Cargar datos al iniciar
+    window.onload = () => {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if(saved) rifaData = JSON.parse(saved);
+        
+        // Inicializar 1 a 100 si está vacío
+        for(let i=1; i<=100; i++) {
+            if(!rifaData[i]) rifaData[i] = { estado: 'libre', nombre: '', tel: '' };
+        }
+        renderGrid();
+    };
 
-// ── PERSISTENCIA ──────────────────────────────────────────────
-function guardar() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
-}
-function cargar() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) data = JSON.parse(raw);
-  } catch(e) {}
-  for (let i = 1; i <= 100; i++) {
-    if (!data[i]) data[i] = {estado:'libre', nombre:'', telefono:'', fecha:''};
-  }
-}
+    function renderGrid() {
+        const grid = document.getElementById('grid');
+        grid.innerHTML = '';
+        for(let i=1; i<=100; i++) {
+            const d = rifaData[i];
+            const btn = document.createElement('button');
+            btn.className = `num-btn ${d.estado}`;
+            btn.innerHTML = `<span>${i}</span><span class="na">${d.nombre.split(' ')[0]}</span>`;
+            btn.onclick = () => handleNumClick(i);
+            grid.appendChild(btn);
+        }
+    }
 
-// ── INIT ──────────────────────────────────────────────────────
-window.addEventListener('load', function() {
-  cargar();
-  renderGrid();
-  updateResumen();
-});
+    function handleNumClick(num) {
+        const d = rifaData[num];
+        if(isAdmin) {
+            // El admin puede gestionar cualquier número
+            abrirGestionAdmin(num);
+        } else {
+            if(d.estado === 'libre') {
+                pendingNum = num;
+                document.getElementById('rNum').innerText = num;
+                openOverlay('overlayReserva');
+            } else {
+                showToast(`El número ${num} ya está ${d.estado}`, 'info');
+            }
+        }
+    }
 
-// ── GRID ──────────────────────────────────────────────────────
-function renderGrid() {
-  const g = document.getElementById('grid');
-  g.innerHTML = '';
-  for (let i = 1; i <= 100; i++) {
-    const d = data[i];
-    const btn = document.createElement('button');
-    btn.id = 'btn-' + i;
-    btn.className = 'num-btn ' + d.estado;
-    const primer = d.nombre ? d.nombre.split(' ')[0] : '';
-    btn.innerHTML = '<span class="n">' + i + '</span><span class="na">' + primer + '</span>';
-    btn.title = d.estado === 'libre' ? 'Disponible'
-      : d.estado === 'reservado' ? 'Reservado: ' + d.nombre
-      : 'Pagado: ' + d.nombre;
-    btn.addEventListener('click', function() { handleClick(i); });
-    g.appendChild(btn);
-  }
-}
+    function confirmarReserva() {
+        const nom = document.getElementById('rNombre').value;
+        const tel = document.getElementById('rTel').value;
+        if(!nom || !tel) return showToast("Faltan datos", "err");
 
-function renderBtn(i) {
-  const btn = document.getElementById('btn-' + i);
-  if (!btn) return;
-  const d = data[i];
-  btn.className = 'num-btn ' + d.estado;
-  const primer = d.nombre ? d.nombre.split(' ')[0] : '';
-  btn.querySelector('.n').textContent = i;
-  btn.querySelector('.na').textContent = primer;
-}
+        rifaData[pendingNum] = { estado: 'reservado', nombre: nom, tel: tel };
+        saveAndRefresh();
+        closeOverlay('overlayReserva');
+        showToast("¡Número reservado con éxito!", "ok");
+    }
 
-function updateResumen() {
-  let l=0, r=0, p=0;
-  for (let i=1; i<=100; i++) {
-    const e = data[i].estado;
-    if (e==='libre') l++;
-    else if (e==='reservado') r++;
-    else p++;
-  }
-  document.getElementById('cL').textContent = l;
-  document.getElementById('cR').textContent = r;
-  document.getElementById('cP').textContent = p;
-  document.getElementById('cT').textContent = '$' + (p*2000).toLocaleString('es-CL');
-  document.getElementById('tablaResumen').textContent =
-    r + ' reservados · ' + p + ' pagados · $' + (p*2000).toLocaleString('es-CL') + ' recaudado';
-}
+    // Funciones Admin
+    function checkPass() {
+        const p = document.getElementById('passInput').value;
+        if(p === ADMIN_PASS) {
+            isAdmin = true;
+            document.getElementById('modeBanner').className = "mode-banner admin";
+            document.getElementById('modeText').innerText = "🔐 MODO ADMINISTRADOR ACTIVO";
+            document.getElementById('btnAdmin').innerText = "Salir";
+            document.getElementById('btnAdmin').onclick = logout;
+            document.getElementById('tablaWrap').style.display = "block";
+            closeOverlay('overlayLogin');
+            renderTabla();
+            showToast("Bienvenido Admin", "ok");
+        } else {
+            showToast("Contraseña incorrecta", "err");
+        }
+    }
 
-// ── CLICKS ────────────────────────────────────────────────────
-function handleClick(i) {
-  const d = data[i];
-  if (isAdmin) {
-    openAdminAction(i);
-  } else if (d.estado === 'libre') {
-    openReserva(i);
-  } else if (d.estado === 'reservado') {
-    toast('⚠️ El número ' + i + ' está reservado por ' + (d.nombre || 'alguien') + '. Elige otro.', 'info');
-  } else {
-    toast('✅ El número ' + i + ' ya está pagado y confirmado.', 'info');
-  }
-}
+    function logout() { location.reload(); }
 
-// ── MODAL RESERVA ─────────────────────────────────────────────
-function openReserva(i) {
-  pendingNum = i;
-  document.getElementById('rNum').textContent = i;
-  document.getElementById('rNombre').value = '';
-  document.getElementById('rTel').value = '';
-  document.getElementById('rErr').style.display = 'none';
-  openOverlay('overlayReserva');
-  setTimeout(function() { document.getElementById('rNombre').focus(); }, 120);
-}
+    function renderTabla() {
+        const tbody = document.getElementById('tablaBody');
+        tbody.innerHTML = '';
+        Object.keys(rifaData).forEach(num => {
+            const d = rifaData[num];
+            if(d.estado === 'libre') return;
+            
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><b>${num}</b></td>
+                <td>${d.nombre}</td>
+                <td>${d.tel}</td>
+                <td><span class="badge ${d.estado}">${d.estado.toUpperCase()}</span></td>
+                <td>
+                    ${d.estado === 'reservado' ? `<button onclick="cambiarEstado(${num},'pagado')" style="background:#dcfce7; color:#166534; padding:5px; border:1px solid #86efac; border-radius:4px; cursor:pointer; font-weight:bold">Aprobar Pago</button>` : ''}
+                    <button onclick="cambiarEstado(${num},'libre')" style="background:#fee2e2; color:#991b1b; padding:5px; border:1px solid #fca5a5; border-radius:4px; cursor:pointer">Liberar</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
 
-function confirmarReserva() {
-  const nombre = document.getElementById('rNombre').value.trim();
-  const tel    = document.getElementById('rTel').value.trim();
-  if (!nombre || !tel) { document.getElementById('rErr').style.display = 'block'; return; }
-  const fecha = new Date().toLocaleString('es-CL', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  data[pendingNum] = {estado:'reservado', nombre:nombre, telefono:tel, fecha:fecha};
-  guardar();
-  renderBtn(pendingNum);
-  updateResumen();
-  if (isAdmin) renderTabla();
-  closeOverlay('overlayReserva');
-  toast('🎉 ¡Número ' + pendingNum + ' reservado para ' + nombre + '!', 'ok');
-}
+    function cambiarEstado(num, nuevo) {
+        if(nuevo === 'libre') {
+            rifaData[num] = { estado: 'libre', nombre: '', tel: '' };
+        } else {
+            rifaData[num].estado = nuevo;
+        }
+        saveAndRefresh();
+        if(isAdmin) renderTabla();
+    }
 
-// ── ADMIN LOGIN ───────────────────────────────────────────────
-function checkPass() {
-  if (document.getElementById('passInput').value === ADMIN_PASS) {
-    closeOverlay('overlayLogin');
-    activarAdmin();
-  } else {
-    document.getElementById('passErr').style.display = 'block';
-    document.getElementById('passInput').value = '';
-  }
-}
+    function saveAndRefresh() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(rifaData));
+        renderGrid();
+    }
 
-function activarAdmin() {
-  isAdmin = true;
-  const b = document.getElementById('modeBanner');
-  b.className = 'mode-banner admin';
-  document.getElementById('modeText').textContent = '🔑 Modo Admin — confirma pagos y descarga Excel';
-  document.getElementById('btnAdmin').textContent = '🚪 Salir';
-  document.getElementById('btnAdmin').onclick = cerrarAdmin;
-  document.getElementById('instruc').textContent = 'Admin: clic en cualquier número para gestionar su estado';
-  document.getElementById('tablaWrap').style.display = 'block';
-  renderTabla();
-}
+    function exportarExcel() {
+        const rows = [["Número", "Nombre", "Teléfono", "Estado"]];
+        Object.keys(rifaData).forEach(num => {
+            const d = rifaData[num];
+            if(d.estado !== 'libre') rows.push([num, d.nombre, d.tel, d.estado]);
+        });
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Rifa");
+        XLSX.writeFile(wb, "Reporte_Rifa.xlsx");
+    }
 
-function cerrarAdmin() {
-  isAdmin = false;
-  const b = document.getElementById('modeBanner');
-  b.className = 'mode-banner participante';
-  document.getElementById('modeText').textContent = '👤 Modo Participante — elige y reserva tu número';
-  document.getElementById('btnAdmin').textContent = '🔐 Admin';
-  document.getElementById('btnAdmin').onclick = function() { openOverlay('overlayLogin'); };
-  document.getElementById('instruc').textContent = 'Haz clic en un número disponible para reservarlo';
-  document.getElementById('tablaWrap').style.display = 'none';
-}
-
-// ── ADMIN ACCIÓN ──────────────────────────────────────────────
-function openAdminAction(i) {
-  const d = data[i];
-  document.getElementById('aN').textContent = i;
-  const est = {libre:'🟢 Disponible', reservado:'🟡 Reservado', pagado:'✅ Pagado'};
-  document.getElementById('aInfo').textContent = est[d.estado] || d.estado;
-  document.getElementById('aDetail').textContent = d.nombre   ? 'Nombre: '   + d.nombre   : '';
-  document.getElementById('aTel').textContent    = d.telefono ? 'Teléfono: ' + d.telefono : '';
-  const cont = document.getElementById('adminActBtns');
-  cont.innerHTML = '';
-  function addBtn(label, bg, color, fn) {
-    const b = document.createElement('button');
-    b.textContent = label;
-    b.style.cssText = 'background:' + bg + ';color:' + color;
-    b.onclick = fn;
-    cont.appendChild(b);
-  }
-  if (d.estado === 'libre') {
-    addBtn('✅ Marcar como Pagado',    '#dcfce7','#166534', function() { cambiarEstado(i,'pagado'); });
-    addBtn('🟡 Marcar como Reservado','#fef3c7','#92400e', function() { closeOverlay('overlayAdminAct'); openReserva(i); });
-  } else if (d.estado === 'reservado') {
-    addBtn('✅ Confirmar Pago',  '#dcfce7','#166534', function() { cambiarEstado(i,'pagado'); });
-    addBtn('❌ Liberar número',  '#fee2e2','#991b1b', function() { cambiarEstado(i,'libre'); });
-  } else {
-    addBtn('↩ Volver a Reservado','#fef3c7','#92400e', function() { cambiarEstado(i,'reservado'); });
-    addBtn('❌ Liberar número',    '#fee2e2','#991b1b', function() { cambiarEstado(i,'libre'); });
-  }
-  openOverlay('overlayAdminAct');
-}
-
-function cambiarEstado(i, nuevoEstado) {
-  const fecha = new Date().toLocaleString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-  if (nuevoEstado === 'libre') {
-    data[i] = {estado:'libre', nombre:'', telefono:'', fecha:''};
-  } else {
-    data[i].estado = nuevoEstado;
-    data[i].fecha  = fecha;
-  }
-  guardar();
-  renderBtn(i);
-  updateResumen();
-  renderTabla();
-  closeOverlay('overlayAdminAct');
-  const lbl = {pagado:'Pagado ✓', reservado:'Reservado', libre:'Liberado'};
-  toast('Número ' + i + ' → ' + lbl[nuevoEstado], 'ok');
-}
-
-// ── TABLA ADMIN ───────────────────────────────────────────────
-function renderTabla() {
-  const tbody = document.getElementById('tablaBody');
-  tbody.innerHTML = '';
-  for (let i = 1; i <= 100; i++) {
-    const d = data[i];
-    if (d.estado === 'libre') continue;
-    const tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td><strong>' + i + '</strong></td>' +
-      '<td>' + (d.nombre||'—') + '</td>' +
-      '<td>' + (d.telefono||'—') + '</td>' +
-      '<td><span class="badge ' + d.estado + '">' + (d.estado==='reservado'?'Reservado':'Pagado ✓') + '</span></td>' +
-      '<td style="font-size:10px;color:var(--gris)">' + (d.fecha||'—') + '</td>' +
-      '<td>' +
-        (d.estado==='reservado'
-          ? '<button class="btn-accion btn-pagar" onclick="cambiarEstado(' + i + ','pagado')">✅ Confirmar Pago</button>'
-          : '<button class="btn-accion btn-liberar" onclick="cambiarEstado(' + i + ','reservado')">↩ Reservar</button>') +
-        '<button class="btn-accion btn-liberar" onclick="cambiarEstado(' + i + ','libre')">❌ Liberar</button>' +
-      '</td>';
-    tbody.appendChild(tr);
-  }
-  if (!tbody.children.length) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--gris);font-style:italic">Aún no hay participantes registrados</td></tr>';
-  }
-  updateResumen();
-}
-
-// ── EXPORTAR EXCEL ────────────────────────────────────────────
-function exportarExcel() {
-  if (typeof XLSX === 'undefined') { toast('Cargando...','info'); return; }
-  const wb = XLSX.utils.book_new();
-  const r1 = [['N°','Nombre y Apellido','Teléfono','Pagado (Sí/No)','Fecha']];
-  for (let i=1; i<=100; i++) {
-    const d = data[i];
-    if (d.estado !== 'libre') r1.push([i, d.nombre, d.telefono, d.estado==='pagado'?'Sí':'No', d.fecha]);
-  }
-  const ws1 = XLSX.utils.aoa_to_sheet(r1);
-  ws1['!cols'] = [{wch:5},{wch:25},{wch:18},{wch:14},{wch:18}];
-  XLSX.utils.book_append_sheet(wb, ws1, 'Participantes');
-  const r2 = [['N°','Nombre','Teléfono','Estado','Fecha']];
-  for (let i=1; i<=100; i++) {
-    const d = data[i];
-    r2.push([i, d.nombre||'', d.telefono||'', d.estado==='libre'?'Libre':d.estado==='reservado'?'Reservado':'Pagado', d.fecha||'']);
-  }
-  const ws2 = XLSX.utils.aoa_to_sheet(r2);
-  XLSX.utils.book_append_sheet(wb, ws2, 'Todos los Números');
-  XLSX.writeFile(wb, 'Rifa_Solidaria_' + new Date().toLocaleDateString('es-CL').replace(/\//g,'-') + '.xlsx');
-  toast('📥 Excel descargado','ok');
-}
-
-// ── HELPERS ───────────────────────────────────────────────────
-function openOverlay(id)  { document.getElementById(id).classList.add('open'); }
-function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
-document.addEventListener('keydown', function(e) {
-  if (e.key==='Escape') ['overlayLogin','overlayReserva','overlayAdminAct'].forEach(closeOverlay);
-});
-function toast(msg, type) {
-  type = type || 'ok';
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast ' + type + ' show';
-  clearTimeout(t._t);
-  t._t = setTimeout(function() { t.classList.remove('show'); }, 3500);
-}
+    // Helpers UI
+    function openOverlay(id) { document.getElementById(id).classList.add('open'); }
+    function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
+    
+    function showToast(msg, type) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.className = `toast show ${type}`;
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
 </script>
+
 </body>
 </html>
