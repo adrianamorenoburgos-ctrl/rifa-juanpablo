@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        /* Estilos Base y Variables */
+        /* Estilos Base */
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{--carbon:#1E2A35;--dorado:#C9A84C;--dorado-l:#E8C97A;--crema:#F5F0E8;--beige:#E8DFC8;--blanco:#fff;--gris:#6B7280}
         body{background:#c8bc9e;font-family:'Lato',sans-serif;padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:20px;min-height:100vh}
@@ -25,23 +25,37 @@
         .btn-export{background:var(--dorado); color:var(--carbon); padding:8px 16px; border-radius:6px; border:none; font-weight:700; display:none}
         .mode-banner.admin .btn-export{display:inline-block}
 
-        /* Flyer Principal */
-        .flyer{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);box-shadow:0 20px 60px rgba(0,0,0,.3)}
-        .header{background:var(--carbon);padding:30px;text-align:center;color:white}
-        .title{font-family:'Playfair Display',serif;font-size:32px;margin-top:10px}
-        .title span{color:var(--dorado-l);display:block;font-size:22px;font-style:italic}
+        /* Contenedor Principal (Flyer) */
+        .flyer{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+        .header{background:var(--carbon);padding:40px 20px;text-align:center;color:white}
+        .title{font-family:'Playfair Display',serif;font-size:36px;margin-top:10px}
+        .title span{color:var(--dorado-l);display:block;font-size:24px;font-style:italic}
         
-        .price-band{background:var(--dorado);padding:15px;display:flex;justify-content:center;align-items:center;gap:20px;font-weight:900;font-size:20px}
+        /* Secciones de Contenido */
+        .content-section{padding:30px; background:white; border-bottom:1px solid var(--beige)}
+        .section-title{font-family:'Playfair Display', serif; color:var(--carbon); margin-bottom:15px; border-bottom:2px solid var(--dorado); display:inline-block}
+        
+        .grid-info{display:grid; grid-template-columns: 1fr 1fr; gap:20px}
+        
+        /* Estilo Premios */
+        .premio-item{display:flex; align-items:center; gap:10px; margin-bottom:8px; font-weight:700; color:#444}
+        .premio-num{background:var(--dorado); color:white; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:50%; font-size:14px}
+
+        /* Datos Transferencia */
+        .transfer-card{background:var(--crema); padding:20px; border-radius:8px; border-left:5px solid var(--dorado)}
+        .transfer-card p {margin:5px 0; font-size:14px}
+        
+        .price-band{background:var(--dorado);padding:15px;display:flex;justify-content:center;align-items:center;gap:20px;font-weight:900;font-size:24px; color:var(--carbon)}
         
         /* Grilla de Números */
-        .numeros-wrap{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);padding:20px}
-        .num-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin:20px 0}
+        .numeros-wrap{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);padding:30px; margin-bottom:50px}
+        .num-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:10px;margin:25px 0}
         
-        .num-btn{aspect-ratio:1;border:1.5px solid #d0c8b0;background:#fff;border-radius:6px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:0.2s}
-        .num-btn:hover{transform:scale(1.1);z-index:2}
+        .num-btn{aspect-ratio:1;border:1.5px solid #d0c8b0;background:#fff;border-radius:6px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:0.2s; cursor:pointer}
+        .num-btn:hover{transform:scale(1.1);z-index:2; border-color:var(--dorado)}
         .num-btn.reservado{background:#fef3c7;border-color:var(--dorado);color:#92400e}
         .num-btn.pagado{background:#dcfce7;border-color:#16a34a;color:#166534}
-        .num-btn .na{font-size:8px;font-weight:400;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+        .num-btn .na{font-size:9px;font-weight:400;max-width:90%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
         /* Modales y Toasts */
         .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center}
@@ -56,17 +70,15 @@
         .ok{background:#166534} .err{background:#991b1b} .info{background:#1e40af}
 
         /* Tabla Admin */
-        .tabla-wrap{width:860px;max-width:100%;background:#fff;border:3px solid var(--dorado);margin-top:20px;display:none;overflow:hidden}
-        table{width:100%;border-collapse:collapse}
+        .tabla-wrap{width:860px;max-width:100%;background:#fff;border:3px solid var(--dorado);margin-top:20px;display:none;overflow-x:auto}
+        table{width:100%;border-collapse:collapse; min-width:600px}
         th{background:var(--carbon);color:var(--dorado);padding:12px;font-size:12px;text-align:left}
         td{padding:12px;border-bottom:1px solid #eee;font-size:13px}
-        .badge{padding:4px 8px;border-radius:4px;font-size:11px;font-weight:700}
-        .badge.reservado{background:#fef3c7;color:#92400e}
-        .badge.pagado{background:#dcfce7;color:#166534}
 
-        @media(max-width:600px){
+        @media(max-width:768px){
+            .grid-info{grid-template-columns: 1fr}
             .num-grid{grid-template-columns:repeat(5,1fr)}
-            .title{font-size:24px}
+            .title{font-size:28px}
         }
     </style>
 </head>
@@ -75,10 +87,65 @@
 <div id="toast" class="toast"></div>
 
 <div class="mode-banner participante" id="modeBanner">
-    <span id="modeText">👤 Modo Participante — Elige tu número</span>
+    <span id="modeText">👤 Modo Participante</span>
     <div class="banner-btns">
-        <button class="btn-export" onclick="exportarExcel()">📥 Excel</button>
-        <button class="btn-main" id="btnAdmin" onclick="openOverlay('overlayLogin')">🔐 Admin</button>
+        <button class="btn-export" onclick="exportarExcel()">📥 Descargar Excel</button>
+        <button class="btn-main" id="btnAdmin" onclick="openOverlay('overlayLogin')">🔐 Acceso Admin</button>
+    </div>
+</div>
+
+<div class="flyer">
+    <div class="header">
+        <p style="letter-spacing: 3px; font-size: 14px">✦ GRAN RIFA SOLIDARIA ✦</p>
+        <h1 class="title">JUNTOS POR JUAN PABLO<span>El Cariño Que Nos Une</span></h1>
+    </div>
+
+    <div class="content-section">
+        <h3 class="section-title">Nuestra Causa</h3>
+        <p style="line-height: 1.6; color: #555;">
+            Esta rifa nace con el propósito de apoyar a <strong>Juan Pablo</strong> en su proceso de recuperación y tratamiento médico. 
+            Cada número que elijas es un grano de arena que contribuye directamente a mejorar su calidad de vida y costear sus terapias. 
+            ¡Agradecemos de todo corazón tu solidaridad!
+        </p>
+    </div>
+
+    <div class="grid-info">
+        <div class="content-section" style="border-right: 1px solid var(--beige)">
+            <h3 class="section-title">Premios a Sortear</h3>
+            <div class="premio-item"><div class="premio-num">1</div> $100.000 en Efectivo</div>
+            <div class="premio-item"><div class="premio-num">2</div> Canasta Familiar Premium</div>
+            <div class="premio-item"><div class="premio-num">3</div> Set de Parrilla Completo</div>
+            <div class="premio-item"><div class="premio-num">4</div> Cena para 2 en Restaurant</div>
+            <p style="font-size: 12px; color: var(--gris); margin-top: 15px;">* Sorteo: 30 de Mayo de 2025</p>
+        </div>
+
+        <div class="content-section">
+            <h3 class="section-title">Datos de Transferencia</h3>
+            <div class="transfer-card">
+                <p><strong>Banco:</strong> Banco de Crédito</p>
+                <p><strong>Tipo:</strong> Cuenta Corriente</p>
+                <p><strong>Número:</strong> 123-456789-00</p>
+                <p><strong>Titular:</strong> Juan Pablo Pérez</p>
+                <p><strong>Rut:</strong> 12.345.678-9</p>
+                <p><strong>Correo:</strong> contacto@ayuda.cl</p>
+            </div>
+            <p style="font-size: 11px; margin-top: 10px; color: #888">Envía tu comprobante vía WhatsApp al reservar.</p>
+        </div>
+    </div>
+
+    <div class="price-band">VALOR NÚMERO: $2.000</div>
+</div>
+
+<div class="numeros-wrap">
+    <h2 style="text-align:center; font-family:'Playfair Display'; margin-bottom: 5px">📋 Elige tu número</h2>
+    <p style="text-align:center; font-size: 14px; color: #666">Haz clic en un número disponible para reservarlo</p>
+    
+    <div class="num-grid" id="grid"></div>
+    
+    <div style="display:flex; justify-content:center; gap:20px; font-size:13px; font-weight: bold">
+        <span style="display:flex; align-items:center; gap:5px"><div style="width:15px;height:15px;background:#fff;border:1px solid #ccc"></div> Disponible</span>
+        <span style="display:flex; align-items:center; gap:5px"><div style="width:15px;height:15px;background:#fef3c7;border:1px solid var(--dorado)"></div> Reservado</span>
+        <span style="display:flex; align-items:center; gap:5px"><div style="width:15px;height:15px;background:#dcfce7;border:1px solid #16a34a"></div> Pagado</span>
     </div>
 </div>
 
@@ -96,39 +163,18 @@
 <div class="overlay" id="overlayReserva">
     <div class="modal">
         <h3>Reservar número <span id="rNum" style="color:var(--dorado)"></span></h3>
-        <p style="font-size:12px;margin-bottom:10px">Ingresa tus datos para contactarte</p>
+        <p style="font-size:12px;margin:10px 0">Ingresa tus datos para registrar la reserva</p>
         <input type="text" id="rNombre" placeholder="Tu nombre completo">
-        <input type="tel" id="rTel" placeholder="Tu teléfono">
+        <input type="tel" id="rTel" placeholder="Tu teléfono/WhatsApp">
         <div class="modal-btns">
             <button style="background:#eee" onclick="closeOverlay('overlayReserva')">Cancelar</button>
-            <button style="background:var(--carbon);color:#fff" onclick="confirmarReserva()">Confirmar Reserva</button>
+            <button style="background:var(--carbon);color:#fff" onclick="confirmarReserva()">Confirmar</button>
         </div>
     </div>
 </div>
 
-<div class="flyer">
-    <div class="header">
-        <p>✦ UNA CAUSA CON CORAZÓN ✦</p>
-        <h1 class="title">RIFA SOLIDARIA<span>El Cariño Que Nos Une</span></h1>
-    </div>
-    <div style="padding:20px; text-align:center; background:white">
-        <p>Todo lo recaudado será para apoyar a <strong>JUAN PABLO</strong> y mejorar su calidad de vida.</p>
-    </div>
-    <div class="price-band">VALOR NÚMERO: $2.000</div>
-</div>
-
-<div class="numeros-wrap">
-    <h2 style="text-align:center; font-family:'Playfair Display'">📋 Elige tu número</h2>
-    <div class="num-grid" id="grid"></div>
-    <div style="display:flex; justify-content:center; gap:15px; font-size:12px">
-        <span>⚪ Disponible</span>
-        <span>🟡 Reservado</span>
-        <span>🟢 Pagado</span>
-    </div>
-</div>
-
 <div class="tabla-wrap" id="tablaWrap">
-    <div style="background:var(--carbon); color:white; padding:15px; font-weight:700">Control de Participantes</div>
+    <div style="background:var(--carbon); color:white; padding:15px; font-weight:700">Panel de Control - Participantes</div>
     <table id="tablaParticipantes">
         <thead>
             <tr>
@@ -140,19 +186,17 @@
 </div>
 
 <script>
-    const ADMIN_PASS = "JuanPablo2025"; // Cambia esta contraseña si gustas
-    const STORAGE_KEY = "rifa_solidaria_data";
+    const ADMIN_PASS = "JuanPablo2025"; 
+    const STORAGE_KEY = "rifa_solidaria_v2";
     
     let isAdmin = false;
     let pendingNum = null;
     let rifaData = {};
 
-    // Cargar datos al iniciar
     window.onload = () => {
         const saved = localStorage.getItem(STORAGE_KEY);
         if(saved) rifaData = JSON.parse(saved);
         
-        // Inicializar 1 a 100 si está vacío
         for(let i=1; i<=100; i++) {
             if(!rifaData[i]) rifaData[i] = { estado: 'libre', nombre: '', tel: '' };
         }
@@ -173,51 +217,46 @@
     }
 
     function handleNumClick(num) {
+        if(isAdmin) return; // En modo admin se gestiona desde la tabla
+        
         const d = rifaData[num];
-        if(isAdmin) {
-            // El admin puede gestionar cualquier número
-            abrirGestionAdmin(num);
+        if(d.estado === 'libre') {
+            pendingNum = num;
+            document.getElementById('rNum').innerText = num;
+            openOverlay('overlayReserva');
         } else {
-            if(d.estado === 'libre') {
-                pendingNum = num;
-                document.getElementById('rNum').innerText = num;
-                openOverlay('overlayReserva');
-            } else {
-                showToast(`El número ${num} ya está ${d.estado}`, 'info');
-            }
+            showToast(`El número ${num} ya está ${d.estado}`, 'info');
         }
     }
 
     function confirmarReserva() {
         const nom = document.getElementById('rNombre').value;
         const tel = document.getElementById('rTel').value;
-        if(!nom || !tel) return showToast("Faltan datos", "err");
+        if(!nom || !tel) return showToast("Por favor completa los datos", "err");
 
         rifaData[pendingNum] = { estado: 'reservado', nombre: nom, tel: tel };
         saveAndRefresh();
         closeOverlay('overlayReserva');
-        showToast("¡Número reservado con éxito!", "ok");
+        showToast("¡Reserva realizada! Envía tu comprobante.", "ok");
+        document.getElementById('rNombre').value = '';
+        document.getElementById('rTel').value = '';
     }
 
-    // Funciones Admin
     function checkPass() {
-        const p = document.getElementById('passInput').value;
-        if(p === ADMIN_PASS) {
+        if(document.getElementById('passInput').value === ADMIN_PASS) {
             isAdmin = true;
             document.getElementById('modeBanner').className = "mode-banner admin";
-            document.getElementById('modeText').innerText = "🔐 MODO ADMINISTRADOR ACTIVO";
-            document.getElementById('btnAdmin').innerText = "Salir";
-            document.getElementById('btnAdmin').onclick = logout;
+            document.getElementById('modeText').innerText = "🔐 PANEL DE ADMINISTRADOR";
+            document.getElementById('btnAdmin').innerText = "Cerrar Sesión";
+            document.getElementById('btnAdmin').onclick = () => location.reload();
             document.getElementById('tablaWrap').style.display = "block";
             closeOverlay('overlayLogin');
             renderTabla();
-            showToast("Bienvenido Admin", "ok");
+            showToast("Acceso concedido", "ok");
         } else {
             showToast("Contraseña incorrecta", "err");
         }
     }
-
-    function logout() { location.reload(); }
 
     function renderTabla() {
         const tbody = document.getElementById('tablaBody');
@@ -231,10 +270,10 @@
                 <td><b>${num}</b></td>
                 <td>${d.nombre}</td>
                 <td>${d.tel}</td>
-                <td><span class="badge ${d.estado}">${d.estado.toUpperCase()}</span></td>
+                <td><span style="color:${d.estado === 'pagado' ? 'green' : 'orange'}">${d.estado.toUpperCase()}</span></td>
                 <td>
-                    ${d.estado === 'reservado' ? `<button onclick="cambiarEstado(${num},'pagado')" style="background:#dcfce7; color:#166534; padding:5px; border:1px solid #86efac; border-radius:4px; cursor:pointer; font-weight:bold">Aprobar Pago</button>` : ''}
-                    <button onclick="cambiarEstado(${num},'libre')" style="background:#fee2e2; color:#991b1b; padding:5px; border:1px solid #fca5a5; border-radius:4px; cursor:pointer">Liberar</button>
+                    ${d.estado === 'reservado' ? `<button onclick="cambiarEstado(${num},'pagado')" style="background:#16a34a; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer">Marcar Pagado</button>` : ''}
+                    <button onclick="cambiarEstado(${num},'libre')" style="background:#dc2626; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer">Liberar</button>
                 </td>
             `;
             tbody.appendChild(tr);
@@ -248,7 +287,7 @@
             rifaData[num].estado = nuevo;
         }
         saveAndRefresh();
-        if(isAdmin) renderTabla();
+        renderTabla();
     }
 
     function saveAndRefresh() {
@@ -264,11 +303,10 @@
         });
         const ws = XLSX.utils.aoa_to_sheet(rows);
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Rifa");
-        XLSX.writeFile(wb, "Reporte_Rifa.xlsx");
+        XLSX.utils.book_append_sheet(wb, ws, "Rifa_JuanPablo");
+        XLSX.writeFile(wb, "Listado_Rifa.xlsx");
     }
 
-    // Helpers UI
     function openOverlay(id) { document.getElementById(id).classList.add('open'); }
     function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
     
