@@ -14,8 +14,6 @@
         /* Banner Admin */
         .mode-banner{width:860px;max-width:100%;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-radius:8px;font-size:12px;font-weight:700;background:#dbeafe;color:#1e40af;border:1.5px solid #93c5fd}
         .mode-banner.admin{background:#dcfce7;color:#166534;border-color:#86efac}
-        .btn-admin{background:#1e40af;color:#fff;padding:6px 12px;border-radius:4px;border:none;cursor:pointer;font-weight:700}
-        .mode-banner.admin .btn-admin{background:#166534}
 
         /* Flyer Principal */
         .flyer{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);box-shadow:0 15px 40px rgba(0,0,0,.2);overflow:hidden}
@@ -26,9 +24,8 @@
         .title span{display:block;font-size:22px;font-style:italic;margin-top:10px;font-weight:400;color:var(--dorado-l)}
 
         .context-box{padding:30px 40px;background:white;text-align:justify;line-height:1.6;color:#333;font-size:16px}
-        .context-box p{margin-bottom:12px}
 
-        .price-band{background:var(--dorado);padding:15px;text-align:center;font-weight:900;font-size:22px;color:var(--carbon);border-top:1px solid rgba(0,0,0,0.1);border-bottom:1px solid rgba(0,0,0,0.1)}
+        .price-band{background:var(--dorado);padding:15px;text-align:center;font-weight:900;font-size:22px;color:var(--carbon)}
 
         .info-grid{display:grid;grid-template-columns:1fr 1fr;background:white}
         .info-col{padding:30px;border:1px solid var(--beige)}
@@ -36,25 +33,31 @@
 
         .premio-item{margin-bottom:15px}
         .premio-item strong{display:block;color:var(--dorado);font-size:14px;text-transform:uppercase}
-        .premio-item span{font-weight:700;font-size:17px;color:var(--carbon)}
-
+        
         .transfer-data{background:var(--crema);padding:20px;border-radius:8px;font-size:15px}
         .transfer-data p{margin-bottom:6px;display:flex;justify-content:space-between}
 
-        .comprobante-box{margin:20px 30px;padding:20px;background:#fefce8;border:2px dashed var(--dorado);border-radius:10px;text-align:center;font-weight:700;color:#854d0e}
+        .comprobante-instruccion{margin-top:15px; font-size:13px; font-weight:700; color:#854d0e; line-height:1.4}
 
-        .mini-banner-azul{background:var(--azul-agradece);color:white;padding:12px;text-align:center;font-weight:700;letter-spacing:1px;font-size:14px}
+        .fecha-sorteo-box{margin-top:20px; padding:15px; background:var(--carbon); color:var(--dorado-l); text-align:center; border-radius:6px; font-weight:900}
 
-        .fecha-sorteo{padding:20px;text-align:center;background:var(--carbon);color:var(--dorado-l);font-size:20px;font-weight:900}
+        .mini-banner-footer{background:var(--azul-agradece);color:white;padding:15px;text-align:center;font-weight:700;letter-spacing:1px;font-size:14px;width:860px;max-width:100%}
 
         /* Grilla de Números */
-        .numeros-wrap{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);padding:30px;margin-bottom:40px}
+        .numeros-wrap{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);padding:30px}
+        .num-header{text-align:center; margin-bottom:20px}
+        .num-header h2{font-family:'Playfair Display',serif; font-size:28px; margin-bottom:5px}
+        
         .num-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin:25px 0}
         .num-btn{aspect-ratio:1;border:1px solid #d0c8b0;background:#fff;border-radius:6px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:0.2s}
-        .num-btn:hover{transform:scale(1.08);box-shadow:0 5px 15px rgba(0,0,0,0.1)}
         .num-btn.reservado{background:#fef3c7;border-color:var(--dorado);color:#92400e}
         .num-btn.pagado{background:#dcfce7;border-color:#16a34a;color:#166534}
-        .num-btn .na{font-size:8px;font-weight:400;margin-top:2px;max-width:90%;overflow:hidden;text-overflow:ellipsis}
+
+        /* Contadores Limpios */
+        .resumen-stats{display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-top:20px; border-top: 1px solid var(--beige); padding-top:20px}
+        .stat-item{text-align:center}
+        .stat-val{font-family:'Playfair Display',serif; font-size:24px; font-weight:900; color:var(--carbon)}
+        .stat-lbl{font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#666}
 
         /* Modales */
         .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center}
@@ -64,25 +67,18 @@
         .modal-btns{display:flex;gap:10px;margin-top:20px}
         .modal-btns button{flex:1;padding:12px;border-radius:6px;border:none;font-weight:700;cursor:pointer}
 
-        .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);padding:12px 25px;border-radius:8px;color:#fff;font-weight:700;opacity:0;transition:0.3s;z-index:2000}
-        .toast.show{opacity:1}
-        
         @media(max-width:768px){
             .info-grid{grid-template-columns:1fr}
+            .resumen-stats{grid-template-columns: 1fr 1fr}
             .num-grid{grid-template-columns:repeat(5,1fr)}
-            .title{font-size:32px}
         }
     </style>
 </head>
 <body>
 
-<div id="toast" class="toast"></div>
-
 <div class="mode-banner" id="modeBanner">
     <span id="modeText">👤 Vista Participante</span>
-    <div>
-        <button class="btn-admin" id="btnAdmin" onclick="openOverlay('overlayLogin')">Acceso Admin</button>
-    </div>
+    <button onclick="openOverlay('overlayLogin')" style="padding:5px 10px; cursor:pointer">Admin</button>
 </div>
 
 <div class="flyer">
@@ -92,15 +88,10 @@
     </div>
 
     <div class="context-box">
-        <p>Queremos ayudar y apoyar a una gran persona: <strong>Juan Pablo Gómez</strong>, para que viva con la comodidad y autonomía que merece.</p>
-        <p>Todo lo recaudado será para mejorar su hogar y fortalecer sus herramientas de vida diaria.</p>
-        <p>Deseamos recordarle que no está solo y que cuenta con personas que lo estiman y lo quieren.</p>
-        <p style="text-align: center; font-weight: 700; margin-top: 15px;">¡Tu apoyo hace la diferencia! 🤝</p>
+        <p>Queremos ayudar y apoyar a una gran persona: <strong>Juan Pablo Gómez</strong>, para que viva con la comodidad y autonomía que merece. Todo lo recaudado será para mejorar su hogar y fortalecer sus herramientas de vida diaria. Deseamos recordarle que no está solo y que cuenta con personas que lo estiman y lo quieren. <strong>¡Tu apoyo hace la diferencia! 🤝</strong></p>
     </div>
 
-    <div class="price-band">
-        Valor del número $2.000 ✦ 4 increíbles premios ✦
-    </div>
+    <div class="price-band">Valor del número $2.000 ✦ 4 increíbles premios ✦</div>
 
     <div class="info-grid">
         <div class="info-col">
@@ -109,7 +100,7 @@
             <div class="premio-item"><strong>2° Premio</strong><span>Gift Card $50.000</span></div>
             <div class="premio-item"><strong>3° Premio</strong><span>Estufa Cuarzo NEX (eléctrica)</span></div>
             <div class="premio-item"><strong>4° Premio</strong><span>Canasta Útiles de Aseo</span></div>
-            <p style="font-size: 11px; color: #777; margin-top: 10px;">*La imagen es referencial</p>
+            <div class="fecha-sorteo-box">📅 Sorteo: 31 de Mayo 2026</div>
         </div>
         <div class="info-col">
             <h3>💳 Datos para transferir</h3>
@@ -120,188 +111,95 @@
                 <p><strong>Cuenta:</strong> <span>Cuenta Rut</span></p>
                 <p><strong>Correo:</strong> <span>lastra.n.c@gmail.com</span></p>
             </div>
+            <div class="comprobante-instruccion">
+                📲 Después de hacer la transferencia, envía el comprobante de pago del total de números elegidos para poder confirmar tu número.
+            </div>
         </div>
-    </div>
-
-    <div class="comprobante-box">
-        📲 Después de hacer la transferencia, envía el comprobante de pago del total de números elegidos para poder confirmar tu número.
-    </div>
-
-    <div class="mini-banner-azul">
-        Rifa Solidaria &nbsp;·&nbsp; El Cariño Que Nos Une &nbsp;·&nbsp; ¡Gracias por tu apoyo!
-    </div>
-
-    <div class="fecha-sorteo">
-        📅 Fecha del sorteo: 31 de Mayo 2026
     </div>
 </div>
 
 <div class="numeros-wrap">
-    <h2 style="text-align:center; font-family:'Playfair Display'">Elige tus números</h2>
+    <div class="num-header">
+        <h2>📋 Selecciona tu número</h2>
+        <p style="font-weight:700">Valor: $2.000 · Del 1 al 100</p>
+        <p style="font-size:13px; color:#666; margin-top:5px">Haz clic en un número disponible para reservarlo</p>
+    </div>
+
     <div class="num-grid" id="grid"></div>
-    <div style="display:flex; justify-content:center; gap:15px; font-size:12px; font-weight: 700">
-        <span style="color:#666">⚪ Libre</span>
-        <span style="color:#b45309">🟡 Reservado</span>
-        <span style="color:#15803d">🟢 Pagado</span>
+
+    <div class="resumen-stats">
+        <div class="stat-item"><div class="stat-val" id="count-disp">100</div><div class="stat-lbl">Disponibles</div></div>
+        <div class="stat-item"><div class="stat-val" id="count-res">0</div><div class="stat-lbl">Reservados</div></div>
+        <div class="stat-item"><div class="stat-val" id="count-pag">0</div><div class="stat-lbl">Pagados</div></div>
+        <div class="stat-item"><div class="stat-val" id="count-money">$0</div><div class="stat-lbl">Recaudado</div></div>
     </div>
 </div>
 
-<div class="overlay" id="overlayLogin">
-    <div class="modal">
-        <h3>Panel Administrativo</h3>
-        <input type="password" id="passInput" placeholder="Contraseña">
-        <div class="modal-btns">
-            <button style="background:#eee" onclick="closeOverlay('overlayLogin')">Cerrar</button>
-            <button style="background:var(--carbon);color:white" onclick="checkPass()">Entrar</button>
-        </div>
-    </div>
+<div class="mini-banner-footer">
+    Rifa Solidaria &nbsp;·&nbsp; El Cariño Que Nos Une &nbsp;·&nbsp; ¡Gracias por tu apoyo!
 </div>
 
-<div class="overlay" id="overlayReserva">
-    <div class="modal">
-        <h3>Reservar Número <span id="rNum" style="color:var(--dorado)"></span></h3>
-        <input type="text" id="rNombre" placeholder="Tu Nombre">
-        <input type="tel" id="rTel" placeholder="Tu Teléfono">
-        <div class="modal-btns">
-            <button style="background:#eee" onclick="closeOverlay('overlayReserva')">Cancelar</button>
-            <button style="background:var(--carbon);color:white" onclick="confirmarReserva()">Reservar</button>
-        </div>
-    </div>
-</div>
-
-<div id="adminPanel" style="display:none; width:860px; max-width:100%; background:white; border:3px solid var(--dorado); padding:20px; margin-bottom:40px">
-    <h3>Gestión de Números</h3>
-    <div style="overflow-x:auto">
-        <table style="width:100%; border-collapse:collapse; margin-top:15px">
-            <thead>
-                <tr style="background:var(--carbon); color:white; font-size:13px">
-                    <th style="padding:10px">N°</th><th>Nombre</th><th>Teléfono</th><th>Estado</th><th>Acción</th>
-                </tr>
-            </thead>
-            <tbody id="adminTableBody"></tbody>
-        </table>
-    </div>
-    <button onclick="exportarExcel()" style="margin-top:20px; padding:10px; background:var(--dorado); border:none; font-weight:700; cursor:pointer">📥 Descargar Excel</button>
-</div>
+<div class="overlay" id="overlayLogin"><div class="modal"><h3>Admin</h3><input type="password" id="passInput"><div class="modal-btns"><button onclick="closeOverlay('overlayLogin')">Cerrar</button><button onclick="checkPass()">Entrar</button></div></div></div>
+<div class="overlay" id="overlayReserva"><div class="modal"><h3>Reservar <span id="rNum"></span></h3><input type="text" id="rNombre" placeholder="Nombre"><input type="tel" id="rTel" placeholder="Teléfono"><div class="modal-btns"><button onclick="closeOverlay('overlayReserva')">Cerrar</button><button onclick="confirmarReserva()">Reservar</button></div></div></div>
 
 <script>
     const ADMIN_PASS = "JuanPablo2025";
-    const STORAGE_KEY = "rifa_jp_gomez";
+    const STORAGE_KEY = "rifa_data_v3";
     let isAdmin = false;
     let pendingNum = null;
-    let rifaData = {};
+    let data = {};
 
     window.onload = () => {
         const saved = localStorage.getItem(STORAGE_KEY);
-        if(saved) rifaData = JSON.parse(saved);
-        for(let i=1; i<=100; i++) {
-            if(!rifaData[i]) rifaData[i] = { estado:'libre', nombre:'', tel:'' };
-        }
-        renderGrid();
+        if(saved) data = JSON.parse(saved);
+        for(let i=1; i<=100; i++) if(!data[i]) data[i] = { estado:'libre', nombre:'', tel:'' };
+        render();
     };
 
-    function renderGrid() {
+    function render() {
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
-        for(let i=1; i<=100; i++){
-            const d = rifaData[i];
+        let d=0, r=0, p=0;
+        for(let i=1; i<=100; i++) {
+            const item = data[i];
             const btn = document.createElement('button');
-            btn.className = `num-btn ${d.estado}`;
-            btn.innerHTML = `<span>${i}</span><span class="na">${d.nombre.split(' ')[0]}</span>`;
-            btn.onclick = () => handleBtn(i);
+            btn.className = `num-btn ${item.estado}`;
+            btn.innerHTML = `<span>${i}</span>`;
+            btn.onclick = () => {
+                if(isAdmin) {
+                    if(item.estado === 'reservado') data[i].estado = 'pagado';
+                    else if(item.estado === 'pagado') data[i].estado = 'libre';
+                    save();
+                } else if(item.estado === 'libre') {
+                    pendingNum = i; document.getElementById('rNum').innerText = i; openOverlay('overlayReserva');
+                }
+            };
             grid.appendChild(btn);
+            if(item.estado==='libre') d++; else if(item.estado==='reservado') r++; else p++;
         }
-    }
-
-    function handleBtn(n) {
-        if(isAdmin) return;
-        if(rifaData[n].estado !== 'libre') {
-            showToast("Número ya ocupado", "#1e40af");
-            return;
-        }
-        pendingNum = n;
-        document.getElementById('rNum').innerText = n;
-        openOverlay('overlayReserva');
+        document.getElementById('count-disp').innerText = d;
+        document.getElementById('count-res').innerText = r;
+        document.getElementById('count-pag').innerText = p;
+        document.getElementById('count-money').innerText = `$${(p * 2000).toLocaleString()}`;
     }
 
     function confirmarReserva() {
-        const nom = document.getElementById('rNombre').value;
-        const tel = document.getElementById('rTel').value;
-        if(!nom || !tel) return alert("Faltan datos");
-        rifaData[pendingNum] = { estado:'reservado', nombre:nom, tel:tel };
-        save();
-        closeOverlay('overlayReserva');
-        showToast("¡Reservado! Envía tu comprobante", "#166534");
+        const n = document.getElementById('rNombre').value;
+        const t = document.getElementById('rTel').value;
+        if(!n || !t) return;
+        data[pendingNum] = { estado:'reservado', nombre:n, tel:t };
+        save(); closeOverlay('overlayReserva');
     }
 
     function checkPass() {
-        if(document.getElementById('passInput').value === ADMIN_PASS){
-            isAdmin = true;
-            document.getElementById('modeBanner').classList.add('admin');
-            document.getElementById('modeText').innerText = "🔐 PANEL ADMINISTRADOR";
-            document.getElementById('adminPanel').style.display = 'block';
-            document.getElementById('btnAdmin').innerText = "Salir";
-            document.getElementById('btnAdmin').onclick = () => location.reload();
-            closeOverlay('overlayLogin');
-            renderAdminTable();
-        } else {
-            alert("Contraseña incorrecta");
+        if(document.getElementById('passInput').value === ADMIN_PASS) {
+            isAdmin = true; document.getElementById('modeText').innerText = "🔐 MODO ADMIN (Haz clic para aprobar/liberar)"; closeOverlay('overlayLogin');
         }
     }
 
-    function renderAdminTable() {
-        const tbody = document.getElementById('adminTableBody');
-        tbody.innerHTML = '';
-        Object.keys(rifaData).forEach(n => {
-            const d = rifaData[n];
-            if(d.estado === 'libre') return;
-            const tr = document.createElement('tr');
-            tr.style.borderBottom = "1px solid #eee";
-            tr.innerHTML = `
-                <td style="padding:10px"><b>${n}</b></td>
-                <td>${d.nombre}</td>
-                <td>${d.tel}</td>
-                <td style="color:${d.estado==='pagado'?'green':'orange'}">${d.estado.toUpperCase()}</td>
-                <td>
-                    <button onclick="setEstado(${n},'pagado')" style="background:#dcfce7; border:1px solid #86efac; cursor:pointer">✔</button>
-                    <button onclick="setEstado(${n},'libre')" style="background:#fee2e2; border:1px solid #fca5a5; cursor:pointer">✘</button>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    function setEstado(n, est) {
-        if(est === 'libre') rifaData[n] = { estado:'libre', nombre:'', tel:'' };
-        else rifaData[n].estado = est;
-        save();
-        renderAdminTable();
-    }
-
-    function save() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(rifaData));
-        renderGrid();
-    }
-
-    function exportarExcel() {
-        let rows = [["Número", "Nombre", "Teléfono", "Estado"]];
-        Object.keys(rifaData).forEach(n => {
-            if(rifaData[n].estado !== 'libre') rows.push([n, rifaData[n].nombre, rifaData[n].tel, rifaData[n].estado]);
-        });
-        const ws = XLSX.utils.aoa_to_sheet(rows);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Rifa");
-        XLSX.writeFile(wb, "Rifa_JuanPablo.xlsx");
-    }
-
+    function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); render(); }
     function openOverlay(id) { document.getElementById(id).classList.add('open'); }
     function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
-    function showToast(m, c) {
-        const t = document.getElementById('toast');
-        t.innerText = m; t.style.background = c; t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 3000);
-    }
 </script>
-
 </body>
 </html>
