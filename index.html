@@ -13,6 +13,9 @@
 
         .mode-banner{width:860px;max-width:100%;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-radius:8px;font-size:12px;font-weight:700;background:#dbeafe;color:#1e40af;border:1.5px solid #93c5fd}
         .mode-banner.admin{background:#dcfce7;color:#166534;border-color:#86efac}
+        
+        .btn-export{display:none; background:var(--dorado); color:var(--carbon); border:none; padding:5px 12px; border-radius:4px; font-weight:700; cursor:pointer; margin-left:10px}
+        .mode-banner.admin .btn-export{display:inline-block}
 
         .flyer{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);box-shadow:0 15px 40px rgba(0,0,0,.2);overflow:hidden}
         .header{background:var(--carbon);padding:40px 20px;text-align:center;color:white}
@@ -70,7 +73,10 @@
 
 <div class="mode-banner" id="modeBanner">
     <span id="modeText">👤 Vista Participante</span>
-    <button onclick="openOverlay('overlayLogin')" style="padding:5px 10px; cursor:pointer; background:white; border:1px solid #ccc; border-radius:4px">Admin</button>
+    <div>
+        <button class="btn-export" id="btnExport" onclick="exportarExcel()">📥 Descargar Excel</button>
+        <button onclick="openOverlay('overlayLogin')" style="padding:5px 10px; cursor:pointer; background:white; border:1px solid #ccc; border-radius:4px">Admin</button>
+    </div>
 </div>
 
 <div class="flyer">
@@ -152,13 +158,11 @@
     let pendingNum = null;
     let rifaData = {};
 
-    // Cargar datos al iniciar
     window.onload = () => {
         const saved = localStorage.getItem(STORAGE_KEY);
         if(saved) {
             rifaData = JSON.parse(saved);
         }
-        // Asegurar que existan los 100 números
         for(let i=1; i<=100; i++) {
             if(!rifaData[i]) rifaData[i] = { estado: 'libre', nombre: '', tel: '' };
         }
@@ -178,7 +182,6 @@
             
             btn.onclick = () => {
                 if(isAdmin) {
-                    // Ciclo Admin: Reservado -> Pagado -> Libre
                     if(item.estado === 'reservado') rifaData[i].estado = 'pagado';
                     else if(item.estado === 'pagado') {
                         rifaData[i].estado = 'libre';
@@ -199,7 +202,6 @@
             else p++;
         }
 
-        // Actualizar Contadores
         document.getElementById('count-disp').innerText = d;
         document.getElementById('count-res').innerText = r;
         document.getElementById('count-pag').innerText = p;
@@ -215,7 +217,6 @@
             return;
         }
 
-        // Guardar datos
         rifaData[pendingNum] = { 
             estado: 'reservado', 
             nombre: nombre, 
@@ -223,8 +224,6 @@
         };
 
         save();
-        
-        // Limpiar y cerrar
         document.getElementById('rNombre').value = '';
         document.getElementById('rTel').value = '';
         closeOverlay('overlayReserva');
@@ -239,12 +238,27 @@
     function checkPass() {
         if(document.getElementById('passInput').value === ADMIN_PASS) {
             isAdmin = true;
-            document.getElementById('modeText').innerText = "🔐 MODO ADMIN (Haz clic en números para aprobar/liberar)";
+            document.getElementById('modeText').innerText = "🔐 MODO ADMIN";
             document.getElementById('modeBanner').className = "mode-banner admin";
             closeOverlay('overlayLogin');
         } else {
             alert("Contraseña incorrecta");
         }
+    }
+
+    function exportarExcel() {
+        if (!isAdmin) return;
+        const rows = [["Número", "Nombre", "Teléfono", "Estado"]];
+        for (let i = 1; i <= 100; i++) {
+            const d = rifaData[i];
+            if (d.estado !== 'libre') {
+                rows.push([i, d.nombre, d.tel, d.estado]);
+            }
+        }
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Participantes");
+        XLSX.writeFile(wb, "Rifa_JuanPablo_Participantes.xlsx");
     }
 
     function openOverlay(id) { document.getElementById(id).classList.add('open'); }
