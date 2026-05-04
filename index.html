@@ -11,20 +11,16 @@
         :root{--carbon:#1E2A35;--dorado:#C9A84C;--dorado-l:#E8C97A;--crema:#F5F0E8;--beige:#E8DFC8;--blanco:#fff;--azul-agradece:#1e3a8a}
         body{background:#c8bc9e;font-family:'Lato',sans-serif;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:20px;min-height:100vh}
 
-        /* Banner Admin */
         .mode-banner{width:860px;max-width:100%;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;border-radius:8px;font-size:12px;font-weight:700;background:#dbeafe;color:#1e40af;border:1.5px solid #93c5fd}
         .mode-banner.admin{background:#dcfce7;color:#166534;border-color:#86efac}
 
-        /* Flyer Principal */
         .flyer{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);box-shadow:0 15px 40px rgba(0,0,0,.2);overflow:hidden}
-        
         .header{background:var(--carbon);padding:40px 20px;text-align:center;color:white}
         .header p{letter-spacing:4px;font-size:14px;color:var(--dorado-l);margin-bottom:10px;text-transform:uppercase}
         .title{font-family:'Playfair Display',serif;font-size:42px;line-height:1.1}
         .title span{display:block;font-size:22px;font-style:italic;margin-top:10px;font-weight:400;color:var(--dorado-l)}
 
         .context-box{padding:30px 40px;background:white;text-align:justify;line-height:1.6;color:#333;font-size:16px}
-
         .price-band{background:var(--dorado);padding:15px;text-align:center;font-weight:900;font-size:22px;color:var(--carbon)}
 
         .info-grid{display:grid;grid-template-columns:1fr 1fr;background:white}
@@ -38,28 +34,24 @@
         .transfer-data p{margin-bottom:6px;display:flex;justify-content:space-between}
 
         .comprobante-instruccion{margin-top:15px; font-size:13px; font-weight:700; color:#854d0e; line-height:1.4}
-
         .fecha-sorteo-box{margin-top:20px; padding:15px; background:var(--carbon); color:var(--dorado-l); text-align:center; border-radius:6px; font-weight:900}
 
         .mini-banner-footer{background:var(--azul-agradece);color:white;padding:15px;text-align:center;font-weight:700;letter-spacing:1px;font-size:14px;width:860px;max-width:100%}
 
-        /* Grilla de Números */
         .numeros-wrap{background:var(--crema);width:860px;max-width:100%;border:3px solid var(--dorado);padding:30px}
         .num-header{text-align:center; margin-bottom:20px}
         .num-header h2{font-family:'Playfair Display',serif; font-size:28px; margin-bottom:5px}
         
         .num-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:8px;margin:25px 0}
-        .num-btn{aspect-ratio:1;border:1px solid #d0c8b0;background:#fff;border-radius:6px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:0.2s}
+        .num-btn{aspect-ratio:1;border:1px solid #d0c8b0;background:#fff;border-radius:6px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:0.2s}
         .num-btn.reservado{background:#fef3c7;border-color:var(--dorado);color:#92400e}
         .num-btn.pagado{background:#dcfce7;border-color:#16a34a;color:#166534}
 
-        /* Contadores Limpios */
         .resumen-stats{display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-top:20px; border-top: 1px solid var(--beige); padding-top:20px}
         .stat-item{text-align:center}
         .stat-val{font-family:'Playfair Display',serif; font-size:24px; font-weight:900; color:var(--carbon)}
         .stat-lbl{font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#666}
 
-        /* Modales */
         .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:1000;align-items:center;justify-content:center}
         .overlay.open{display:flex}
         .modal{background:#fff;padding:30px;border-radius:12px;width:90%;max-width:350px;text-align:center}
@@ -78,7 +70,7 @@
 
 <div class="mode-banner" id="modeBanner">
     <span id="modeText">👤 Vista Participante</span>
-    <button onclick="openOverlay('overlayLogin')" style="padding:5px 10px; cursor:pointer">Admin</button>
+    <button onclick="openOverlay('overlayLogin')" style="padding:5px 10px; cursor:pointer; background:white; border:1px solid #ccc; border-radius:4px">Admin</button>
 </div>
 
 <div class="flyer">
@@ -139,65 +131,122 @@
     Rifa Solidaria &nbsp;·&nbsp; El Cariño Que Nos Une &nbsp;·&nbsp; ¡Gracias por tu apoyo!
 </div>
 
-<div class="overlay" id="overlayLogin"><div class="modal"><h3>Admin</h3><input type="password" id="passInput"><div class="modal-btns"><button onclick="closeOverlay('overlayLogin')">Cerrar</button><button onclick="checkPass()">Entrar</button></div></div></div>
-<div class="overlay" id="overlayReserva"><div class="modal"><h3>Reservar <span id="rNum"></span></h3><input type="text" id="rNombre" placeholder="Nombre"><input type="tel" id="rTel" placeholder="Teléfono"><div class="modal-btns"><button onclick="closeOverlay('overlayReserva')">Cerrar</button><button onclick="confirmarReserva()">Reservar</button></div></div></div>
+<div class="overlay" id="overlayLogin"><div class="modal"><h3>Acceso Admin</h3><input type="password" id="passInput" placeholder="Contraseña"><div class="modal-btns"><button onclick="closeOverlay('overlayLogin')">Cerrar</button><button onclick="checkPass()">Entrar</button></div></div></div>
+
+<div class="overlay" id="overlayReserva">
+    <div class="modal">
+        <h3>Reservar número <span id="rNum" style="color:var(--dorado)"></span></h3>
+        <input type="text" id="rNombre" placeholder="Tu Nombre Completo">
+        <input type="tel" id="rTel" placeholder="Tu Teléfono">
+        <div class="modal-btns">
+            <button onclick="closeOverlay('overlayReserva')">Cancelar</button>
+            <button onclick="confirmarReserva()" style="background:var(--carbon); color:white">Confirmar Reserva</button>
+        </div>
+    </div>
+</div>
 
 <script>
     const ADMIN_PASS = "JuanPablo2025";
     const STORAGE_KEY = "rifa_data_v3";
     let isAdmin = false;
     let pendingNum = null;
-    let data = {};
+    let rifaData = {};
 
+    // Cargar datos al iniciar
     window.onload = () => {
         const saved = localStorage.getItem(STORAGE_KEY);
-        if(saved) data = JSON.parse(saved);
-        for(let i=1; i<=100; i++) if(!data[i]) data[i] = { estado:'libre', nombre:'', tel:'' };
+        if(saved) {
+            rifaData = JSON.parse(saved);
+        }
+        // Asegurar que existan los 100 números
+        for(let i=1; i<=100; i++) {
+            if(!rifaData[i]) rifaData[i] = { estado: 'libre', nombre: '', tel: '' };
+        }
         render();
     };
 
     function render() {
         const grid = document.getElementById('grid');
         grid.innerHTML = '';
-        let d=0, r=0, p=0;
+        let d = 0, r = 0, p = 0;
+
         for(let i=1; i<=100; i++) {
-            const item = data[i];
+            const item = rifaData[i];
             const btn = document.createElement('button');
             btn.className = `num-btn ${item.estado}`;
             btn.innerHTML = `<span>${i}</span>`;
+            
             btn.onclick = () => {
                 if(isAdmin) {
-                    if(item.estado === 'reservado') data[i].estado = 'pagado';
-                    else if(item.estado === 'pagado') data[i].estado = 'libre';
+                    // Ciclo Admin: Reservado -> Pagado -> Libre
+                    if(item.estado === 'reservado') rifaData[i].estado = 'pagado';
+                    else if(item.estado === 'pagado') {
+                        rifaData[i].estado = 'libre';
+                        rifaData[i].nombre = '';
+                        rifaData[i].tel = '';
+                    }
                     save();
                 } else if(item.estado === 'libre') {
-                    pendingNum = i; document.getElementById('rNum').innerText = i; openOverlay('overlayReserva');
+                    pendingNum = i;
+                    document.getElementById('rNum').innerText = i;
+                    openOverlay('overlayReserva');
                 }
             };
+            
             grid.appendChild(btn);
-            if(item.estado==='libre') d++; else if(item.estado==='reservado') r++; else p++;
+            if(item.estado === 'libre') d++; 
+            else if(item.estado === 'reservado') r++; 
+            else p++;
         }
+
+        // Actualizar Contadores
         document.getElementById('count-disp').innerText = d;
         document.getElementById('count-res').innerText = r;
         document.getElementById('count-pag').innerText = p;
-        document.getElementById('count-money').innerText = `$${(p * 2000).toLocaleString()}`;
+        document.getElementById('count-money').innerText = `$${(p * 2000).toLocaleString('es-CL')}`;
     }
 
     function confirmarReserva() {
-        const n = document.getElementById('rNombre').value;
-        const t = document.getElementById('rTel').value;
-        if(!n || !t) return;
-        data[pendingNum] = { estado:'reservado', nombre:n, tel:t };
-        save(); closeOverlay('overlayReserva');
+        const nombre = document.getElementById('rNombre').value;
+        const tel = document.getElementById('rTel').value;
+
+        if(!nombre || !tel) {
+            alert("Por favor, completa nombre y teléfono.");
+            return;
+        }
+
+        // Guardar datos
+        rifaData[pendingNum] = { 
+            estado: 'reservado', 
+            nombre: nombre, 
+            tel: tel 
+        };
+
+        save();
+        
+        // Limpiar y cerrar
+        document.getElementById('rNombre').value = '';
+        document.getElementById('rTel').value = '';
+        closeOverlay('overlayReserva');
+        alert("¡Número " + pendingNum + " reservado correctamente!");
+    }
+
+    function save() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(rifaData));
+        render();
     }
 
     function checkPass() {
         if(document.getElementById('passInput').value === ADMIN_PASS) {
-            isAdmin = true; document.getElementById('modeText').innerText = "🔐 MODO ADMIN (Haz clic para aprobar/liberar)"; closeOverlay('overlayLogin');
+            isAdmin = true;
+            document.getElementById('modeText').innerText = "🔐 MODO ADMIN (Haz clic en números para aprobar/liberar)";
+            document.getElementById('modeBanner').className = "mode-banner admin";
+            closeOverlay('overlayLogin');
+        } else {
+            alert("Contraseña incorrecta");
         }
     }
 
-    function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); render(); }
     function openOverlay(id) { document.getElementById(id).classList.add('open'); }
     function closeOverlay(id) { document.getElementById(id).classList.remove('open'); }
 </script>
